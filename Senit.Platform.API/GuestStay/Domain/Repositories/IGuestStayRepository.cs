@@ -8,5 +8,6 @@ namespace Senit.Platform.API.GuestStay.Domain.Repositories;
 /// </summary>
 public interface IGuestStayRepository : IBaseRepository<GuestStayRecord>
 {
+    Task<IEnumerable<GuestStayRecord>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default);
     Task<bool> ExistsActiveStayByRoomIdAsync(string roomId, string? excludedId = null, CancellationToken cancellationToken = default);
 }

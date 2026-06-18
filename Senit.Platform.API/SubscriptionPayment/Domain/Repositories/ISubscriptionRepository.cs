@@ -8,5 +8,6 @@ namespace Senit.Platform.API.SubscriptionPayment.Domain.Repositories;
 /// </summary>
 public interface ISubscriptionRepository : IBaseRepository<Subscription>
 {
+    Task<IEnumerable<Subscription>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default);
 
 }

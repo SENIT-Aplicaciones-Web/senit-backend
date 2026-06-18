@@ -12,6 +12,9 @@ public class SubscriptionQueryService(ISubscriptionRepository repository) : ISub
 {
     public async Task<IEnumerable<Subscription>> Handle(GetAllSubscriptionsQuery query, CancellationToken cancellationToken = default)
     {
+        if (!string.IsNullOrWhiteSpace(query.HotelId))
+            return await repository.ListByHotelIdAsync(query.HotelId, cancellationToken);
+
         return await repository.ListAsync(cancellationToken);
     }
 

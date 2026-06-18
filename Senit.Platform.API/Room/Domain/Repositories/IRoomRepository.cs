@@ -8,5 +8,6 @@ namespace Senit.Platform.API.Room.Domain.Repositories;
 /// </summary>
 public interface IRoomRepository : IBaseRepository<RoomEntity>
 {
+    Task<IEnumerable<RoomEntity>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default);
     Task<bool> ExistsByHotelIdAndNumberAsync(string hotelId, string number, string? excludedId = null, CancellationToken cancellationToken = default);
 }

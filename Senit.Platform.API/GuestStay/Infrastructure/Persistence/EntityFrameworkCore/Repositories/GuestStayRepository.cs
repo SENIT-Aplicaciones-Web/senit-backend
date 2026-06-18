@@ -7,10 +7,17 @@ using Senit.Platform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.R
 namespace Senit.Platform.API.GuestStay.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
 /// <summary>
-///     Entity Framework Core repository for gueststay entities.
+///     Entity Framework Core repository for guest stay entities.
 /// </summary>
 public class GuestStayRepository(AppDbContext context) : BaseRepository<GuestStayRecord>(context), IGuestStayRepository
 {
+    public async Task<IEnumerable<GuestStayRecord>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<GuestStayRecord>()
+            .Where(stay => stay.HotelId == hotelId)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<bool> ExistsActiveStayByRoomIdAsync(string roomId, string? excludedId = null, CancellationToken cancellationToken = default)
     {
         return await Context.Set<GuestStayRecord>()
@@ -20,5 +27,4 @@ public class GuestStayRepository(AppDbContext context) : BaseRepository<GuestSta
                 (excludedId == null || stay.Id != excludedId),
                 cancellationToken);
     }
-
 }

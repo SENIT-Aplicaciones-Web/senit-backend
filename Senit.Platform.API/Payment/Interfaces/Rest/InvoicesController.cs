@@ -35,12 +35,15 @@ public class InvoicesController(
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get all invoices",
-        Description = "Get all invoices",
+        Description = "Get invoices. When hotelId is provided, only invoices linked to payments of the requested hotel are returned.",
         OperationId = "GetAllInvoices")]
     [SwaggerResponse(StatusCodes.Status200OK, "The invoices were found", typeof(IEnumerable<InvoiceResource>))]
-    public async Task<IActionResult> GetAllInvoices(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllInvoices(
+        [SwaggerParameter("Hotel identifier used to return only invoices owned by the active hotel.", Required = false)]
+        [FromQuery] string? hotelId,
+        CancellationToken cancellationToken)
     {
-        var query = new GetAllInvoicesQuery();
+        var query = new GetAllInvoicesQuery(hotelId);
         var entities = await queryService.Handle(query, cancellationToken);
         var resources = entities.Select(InvoiceResourceFromEntityAssembler.ToResourceFromEntity);
 

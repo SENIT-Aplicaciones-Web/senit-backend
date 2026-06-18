@@ -1,6 +1,7 @@
 namespace Senit.Platform.API.Payment.Domain.Model.Queries;
 
 /// <summary>
-///     Query used to get all payments.
+///     Query used to get payments, optionally filtered by hotel.
 /// </summary>
-public record GetAllPaymentsQuery;
+/// <param name="HotelId">Hotel identifier used to return only payments owned by the active hotel.</param>
+public record GetAllPaymentsQuery(string? HotelId = null);

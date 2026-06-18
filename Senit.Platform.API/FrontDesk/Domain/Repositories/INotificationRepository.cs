@@ -8,5 +8,6 @@ namespace Senit.Platform.API.FrontDesk.Domain.Repositories;
 /// </summary>
 public interface INotificationRepository : IBaseRepository<Notification>
 {
+    Task<IEnumerable<Notification>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default);
 
 }

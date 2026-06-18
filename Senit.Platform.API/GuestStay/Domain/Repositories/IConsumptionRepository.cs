@@ -8,5 +8,6 @@ namespace Senit.Platform.API.GuestStay.Domain.Repositories;
 /// </summary>
 public interface IConsumptionRepository : IBaseRepository<Consumption>
 {
+    Task<IEnumerable<Consumption>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default);
 
 }

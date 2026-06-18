@@ -164,6 +164,7 @@ builder.Services.AddCortexMediator([typeof(Program)]);
 
 var app = builder.Build();
 
+// Create the database schema automatically for local and simple deployment scenarios.
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();

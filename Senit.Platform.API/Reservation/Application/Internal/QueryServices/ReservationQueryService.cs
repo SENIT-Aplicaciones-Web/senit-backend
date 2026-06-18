@@ -12,6 +12,9 @@ public class ReservationQueryService(IReservationRepository repository) : IReser
 {
     public async Task<IEnumerable<HotelReservation>> Handle(GetAllReservationsQuery query, CancellationToken cancellationToken = default)
     {
+        if (!string.IsNullOrWhiteSpace(query.HotelId))
+            return await repository.ListByHotelIdAsync(query.HotelId, cancellationToken);
+
         return await repository.ListAsync(cancellationToken);
     }
 

@@ -1,6 +1,7 @@
 namespace Senit.Platform.API.GuestStay.Domain.Model.Queries;
 
 /// <summary>
-///     Query used to get all consumptions.
+///     Query used to get consumptions, optionally filtered by hotel.
 /// </summary>
-public record GetAllConsumptionsQuery;
+/// <param name="HotelId">Hotel identifier used to return only consumptions owned by the active hotel.</param>
+public record GetAllConsumptionsQuery(string? HotelId = null);

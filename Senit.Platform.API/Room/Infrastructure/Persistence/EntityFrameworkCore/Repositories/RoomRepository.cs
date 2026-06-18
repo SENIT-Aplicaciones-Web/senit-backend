@@ -11,10 +11,16 @@ namespace Senit.Platform.API.Room.Infrastructure.Persistence.EntityFrameworkCore
 /// </summary>
 public class RoomRepository(AppDbContext context) : BaseRepository<RoomEntity>(context), IRoomRepository
 {
+    public async Task<IEnumerable<RoomEntity>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<RoomEntity>()
+            .Where(room => room.HotelId == hotelId)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<bool> ExistsByHotelIdAndNumberAsync(string hotelId, string number, string? excludedId = null, CancellationToken cancellationToken = default)
     {
         return await Context.Set<RoomEntity>()
             .AnyAsync(room => room.HotelId == hotelId && room.Number == number && (excludedId == null || room.Id != excludedId), cancellationToken);
     }
-
 }

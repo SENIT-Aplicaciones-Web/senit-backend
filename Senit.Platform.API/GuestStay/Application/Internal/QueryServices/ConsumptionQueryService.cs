@@ -12,6 +12,9 @@ public class ConsumptionQueryService(IConsumptionRepository repository) : IConsu
 {
     public async Task<IEnumerable<Consumption>> Handle(GetAllConsumptionsQuery query, CancellationToken cancellationToken = default)
     {
+        if (!string.IsNullOrWhiteSpace(query.HotelId))
+            return await repository.ListByHotelIdAsync(query.HotelId, cancellationToken);
+
         return await repository.ListAsync(cancellationToken);
     }
 

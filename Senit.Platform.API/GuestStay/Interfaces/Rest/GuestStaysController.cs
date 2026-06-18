@@ -34,12 +34,15 @@ public class GuestStaysController(
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get all guest stays",
-        Description = "Get all guest stays",
+        Description = "Get guest stays. When hotelId is provided, only guest stays belonging to the requested hotel are returned.",
         OperationId = "GetAllGuestStays")]
     [SwaggerResponse(StatusCodes.Status200OK, "The guest stays were found", typeof(IEnumerable<GuestStayResource>))]
-    public async Task<IActionResult> GetAllGuestStays(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllGuestStays(
+        [SwaggerParameter("Hotel identifier used to return only guest stays owned by the active hotel.", Required = false)]
+        [FromQuery] string? hotelId,
+        CancellationToken cancellationToken)
     {
-        var query = new GetAllGuestStaysQuery();
+        var query = new GetAllGuestStaysQuery(hotelId);
         var entities = await queryService.Handle(query, cancellationToken);
         var resources = entities.Select(GuestStayResourceFromEntityAssembler.ToResourceFromEntity);
 

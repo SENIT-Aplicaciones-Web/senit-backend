@@ -34,12 +34,15 @@ public class PaymentsController(
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get all payments",
-        Description = "Get all payments",
+        Description = "Get payments. When hotelId is provided, only payments belonging to the requested hotel are returned.",
         OperationId = "GetAllPayments")]
     [SwaggerResponse(StatusCodes.Status200OK, "The payments were found", typeof(IEnumerable<PaymentResource>))]
-    public async Task<IActionResult> GetAllPayments(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllPayments(
+        [SwaggerParameter("Hotel identifier used to return only payments owned by the active hotel.", Required = false)]
+        [FromQuery] string? hotelId,
+        CancellationToken cancellationToken)
     {
-        var query = new GetAllPaymentsQuery();
+        var query = new GetAllPaymentsQuery(hotelId);
         var entities = await queryService.Handle(query, cancellationToken);
         var resources = entities.Select(PaymentResourceFromEntityAssembler.ToResourceFromEntity);
 

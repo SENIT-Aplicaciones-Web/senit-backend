@@ -34,12 +34,15 @@ public class CleaningTasksController(
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get all cleaning tasks",
-        Description = "Get all cleaning tasks",
+        Description = "Get cleaning tasks. When hotelId is provided, only cleaning tasks belonging to the requested hotel are returned.",
         OperationId = "GetAllCleaningTasks")]
     [SwaggerResponse(StatusCodes.Status200OK, "The cleaning tasks were found", typeof(IEnumerable<CleaningTaskResource>))]
-    public async Task<IActionResult> GetAllCleaningTasks(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllCleaningTasks(
+        [SwaggerParameter("Hotel identifier used to return only cleaning tasks owned by the active hotel.", Required = false)]
+        [FromQuery] string? hotelId,
+        CancellationToken cancellationToken)
     {
-        var query = new GetAllCleaningTasksQuery();
+        var query = new GetAllCleaningTasksQuery(hotelId);
         var entities = await queryService.Handle(query, cancellationToken);
         var resources = entities.Select(CleaningTaskResourceFromEntityAssembler.ToResourceFromEntity);
 

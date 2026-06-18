@@ -35,12 +35,15 @@ public class SubscriptionPaymentsController(
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get all subscription payments",
-        Description = "Get all subscription payments",
+        Description = "Get subscription payments. When hotelId is provided, only subscription payments belonging to the requested hotel are returned.",
         OperationId = "GetAllSubscriptionPayments")]
     [SwaggerResponse(StatusCodes.Status200OK, "The subscription payments were found", typeof(IEnumerable<SubscriptionPaymentResource>))]
-    public async Task<IActionResult> GetAllSubscriptionPayments(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllSubscriptionPayments(
+        [SwaggerParameter("Hotel identifier used to return only subscription payments owned by the active hotel.", Required = false)]
+        [FromQuery] string? hotelId,
+        CancellationToken cancellationToken)
     {
-        var query = new GetAllSubscriptionPaymentsQuery();
+        var query = new GetAllSubscriptionPaymentsQuery(hotelId);
         var entities = await queryService.Handle(query, cancellationToken);
         var resources = entities.Select(SubscriptionPaymentResourceFromEntityAssembler.ToResourceFromEntity);
 

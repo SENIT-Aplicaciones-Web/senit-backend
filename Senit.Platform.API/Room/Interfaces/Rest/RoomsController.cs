@@ -33,12 +33,15 @@ public class RoomsController(
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get all rooms",
-        Description = "Get all rooms",
+        Description = "Get rooms. When hotelId is provided, only rooms assigned to the requested hotel are returned.",
         OperationId = "GetAllRooms")]
     [SwaggerResponse(StatusCodes.Status200OK, "The rooms were found", typeof(IEnumerable<RoomResource>))]
-    public async Task<IActionResult> GetAllRooms(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllRooms(
+        [SwaggerParameter("Hotel identifier used to return only rooms owned by the active hotel.", Required = false)]
+        [FromQuery] string? hotelId,
+        CancellationToken cancellationToken)
     {
-        var query = new GetAllRoomsQuery();
+        var query = new GetAllRoomsQuery(hotelId);
         var entities = await queryService.Handle(query, cancellationToken);
         var resources = entities.Select(RoomResourceFromEntityAssembler.ToResourceFromEntity);
 

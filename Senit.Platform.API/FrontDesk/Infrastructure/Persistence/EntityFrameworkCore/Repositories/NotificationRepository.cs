@@ -11,5 +11,10 @@ namespace Senit.Platform.API.FrontDesk.Infrastructure.Persistence.EntityFramewor
 /// </summary>
 public class NotificationRepository(AppDbContext context) : BaseRepository<Notification>(context), INotificationRepository
 {
-
+    public async Task<IEnumerable<Notification>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<Notification>()
+            .Where(notification => notification.HotelId == hotelId)
+            .ToListAsync(cancellationToken);
+    }
 }

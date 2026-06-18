@@ -12,6 +12,9 @@ public class InvoiceQueryService(IInvoiceRepository repository) : IInvoiceQueryS
 {
     public async Task<IEnumerable<Invoice>> Handle(GetAllInvoicesQuery query, CancellationToken cancellationToken = default)
     {
+        if (!string.IsNullOrWhiteSpace(query.HotelId))
+            return await repository.ListByHotelIdAsync(query.HotelId, cancellationToken);
+
         return await repository.ListAsync(cancellationToken);
     }
 

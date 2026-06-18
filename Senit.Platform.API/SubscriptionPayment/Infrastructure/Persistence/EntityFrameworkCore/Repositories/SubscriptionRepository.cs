@@ -11,5 +11,10 @@ namespace Senit.Platform.API.SubscriptionPayment.Infrastructure.Persistence.Enti
 /// </summary>
 public class SubscriptionRepository(AppDbContext context) : BaseRepository<Subscription>(context), ISubscriptionRepository
 {
-
+    public async Task<IEnumerable<Subscription>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<Subscription>()
+            .Where(subscription => subscription.HotelId == hotelId)
+            .ToListAsync(cancellationToken);
+    }
 }

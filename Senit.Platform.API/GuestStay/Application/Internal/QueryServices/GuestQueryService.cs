@@ -12,6 +12,9 @@ public class GuestQueryService(IGuestRepository repository) : IGuestQueryService
 {
     public async Task<IEnumerable<Guest>> Handle(GetAllGuestsQuery query, CancellationToken cancellationToken = default)
     {
+        if (!string.IsNullOrWhiteSpace(query.HotelId))
+            return await repository.ListByHotelIdAsync(query.HotelId, cancellationToken);
+
         return await repository.ListAsync(cancellationToken);
     }
 

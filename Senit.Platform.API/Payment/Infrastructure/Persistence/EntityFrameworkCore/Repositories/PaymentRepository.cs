@@ -11,5 +11,10 @@ namespace Senit.Platform.API.Payment.Infrastructure.Persistence.EntityFrameworkC
 /// </summary>
 public class PaymentRepository(AppDbContext context) : BaseRepository<PaymentRecord>(context), IPaymentRepository
 {
-
+    public async Task<IEnumerable<PaymentRecord>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<PaymentRecord>()
+            .Where(payment => payment.HotelId == hotelId)
+            .ToListAsync(cancellationToken);
+    }
 }

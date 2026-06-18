@@ -8,5 +8,6 @@ namespace Senit.Platform.API.Payment.Domain.Repositories;
 /// </summary>
 public interface IPaymentRepository : IBaseRepository<PaymentRecord>
 {
+    Task<IEnumerable<PaymentRecord>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default);
 
 }

@@ -1,6 +1,7 @@
 namespace Senit.Platform.API.SubscriptionPayment.Domain.Model.Queries;
 
 /// <summary>
-///     Query used to get all subscriptionpayments.
+///     Query used to get subscription payments, optionally filtered by hotel.
 /// </summary>
-public record GetAllSubscriptionPaymentsQuery;
+/// <param name="HotelId">Hotel identifier used to return only subscription payments owned by the active hotel.</param>
+public record GetAllSubscriptionPaymentsQuery(string? HotelId = null);

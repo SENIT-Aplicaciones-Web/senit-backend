@@ -35,12 +35,15 @@ public class NotificationsController(
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get all visible notifications",
-        Description = "Get all visible notifications",
+        Description = "Get visible notifications. When hotelId is provided, only notifications belonging to the requested hotel are returned.",
         OperationId = "GetAllNotifications")]
     [SwaggerResponse(StatusCodes.Status200OK, "The notifications were found", typeof(IEnumerable<NotificationResource>))]
-    public async Task<IActionResult> GetAllNotifications(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllNotifications(
+        [SwaggerParameter("Hotel identifier used to return only visible notifications owned by the active hotel.", Required = false)]
+        [FromQuery] string? hotelId,
+        CancellationToken cancellationToken)
     {
-        var query = new GetAllNotificationsQuery();
+        var query = new GetAllNotificationsQuery(hotelId);
         var entities = await queryService.Handle(query, cancellationToken);
         var resources = entities.Select(NotificationResourceFromEntityAssembler.ToResourceFromEntity);
 

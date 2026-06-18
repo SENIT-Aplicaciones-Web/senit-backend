@@ -33,12 +33,15 @@ public class ConsumptionsController(
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get all consumptions",
-        Description = "Get all consumptions",
+        Description = "Get consumptions. When hotelId is provided, only consumptions linked to stays of the requested hotel are returned.",
         OperationId = "GetAllConsumptions")]
     [SwaggerResponse(StatusCodes.Status200OK, "The consumptions were found", typeof(IEnumerable<ConsumptionResource>))]
-    public async Task<IActionResult> GetAllConsumptions(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllConsumptions(
+        [SwaggerParameter("Hotel identifier used to return only consumptions owned by the active hotel.", Required = false)]
+        [FromQuery] string? hotelId,
+        CancellationToken cancellationToken)
     {
-        var query = new GetAllConsumptionsQuery();
+        var query = new GetAllConsumptionsQuery(hotelId);
         var entities = await queryService.Handle(query, cancellationToken);
         var resources = entities.Select(ConsumptionResourceFromEntityAssembler.ToResourceFromEntity);
 

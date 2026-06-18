@@ -12,6 +12,9 @@ public class RoomQueryService(IRoomRepository repository) : IRoomQueryService
 {
     public async Task<IEnumerable<RoomEntity>> Handle(GetAllRoomsQuery query, CancellationToken cancellationToken = default)
     {
+        if (!string.IsNullOrWhiteSpace(query.HotelId))
+            return await repository.ListByHotelIdAsync(query.HotelId, cancellationToken);
+
         return await repository.ListAsync(cancellationToken);
     }
 

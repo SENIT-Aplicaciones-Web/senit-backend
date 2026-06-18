@@ -8,5 +8,6 @@ namespace Senit.Platform.API.Housekeeping.Domain.Repositories;
 /// </summary>
 public interface ICleaningTaskRepository : IBaseRepository<CleaningTask>
 {
+    Task<IEnumerable<CleaningTask>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default);
 
 }

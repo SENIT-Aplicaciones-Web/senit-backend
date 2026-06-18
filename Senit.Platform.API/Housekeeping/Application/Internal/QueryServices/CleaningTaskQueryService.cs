@@ -12,6 +12,9 @@ public class CleaningTaskQueryService(ICleaningTaskRepository repository) : ICle
 {
     public async Task<IEnumerable<CleaningTask>> Handle(GetAllCleaningTasksQuery query, CancellationToken cancellationToken = default)
     {
+        if (!string.IsNullOrWhiteSpace(query.HotelId))
+            return await repository.ListByHotelIdAsync(query.HotelId, cancellationToken);
+
         return await repository.ListAsync(cancellationToken);
     }
 

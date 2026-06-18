@@ -11,5 +11,14 @@ namespace Senit.Platform.API.GuestStay.Infrastructure.Persistence.EntityFramewor
 /// </summary>
 public class ConsumptionRepository(AppDbContext context) : BaseRepository<Consumption>(context), IConsumptionRepository
 {
+    public async Task<IEnumerable<Consumption>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default)
+    {
+        var query =
+            from consumption in Context.Set<Consumption>()
+            join stay in Context.Set<GuestStayRecord>() on consumption.GuestStayId equals stay.Id
+            where stay.HotelId == hotelId
+            select consumption;
 
+        return await query.ToListAsync(cancellationToken);
+    }
 }

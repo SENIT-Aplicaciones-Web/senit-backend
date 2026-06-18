@@ -12,6 +12,9 @@ public class PaymentQueryService(IPaymentRepository repository) : IPaymentQueryS
 {
     public async Task<IEnumerable<PaymentRecord>> Handle(GetAllPaymentsQuery query, CancellationToken cancellationToken = default)
     {
+        if (!string.IsNullOrWhiteSpace(query.HotelId))
+            return await repository.ListByHotelIdAsync(query.HotelId, cancellationToken);
+
         return await repository.ListAsync(cancellationToken);
     }
 
