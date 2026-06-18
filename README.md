@@ -4,7 +4,7 @@
 
 - `/hotels`
 - `/users`
-- `/authentication/sign-in`
+- `/authentication`
 - `/rooms`
 - `/reservations`
 - `/guests`
