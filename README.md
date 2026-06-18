@@ -1,5 +1,8 @@
 # Senit Platform API
 
+Deploy: https://senit-backend.onrender.com/swagger/index.html
+Base URL: https://senit-backend.onrender.com/api/v1
+
 ## Endpoints
 
 - `/hotels`
