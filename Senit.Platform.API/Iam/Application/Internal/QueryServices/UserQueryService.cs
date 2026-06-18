@@ -16,6 +16,28 @@ public class UserQueryService(
     {
         var users = (await repository.ListAsync(cancellationToken)).ToList();
 
+        if (!string.IsNullOrWhiteSpace(query.HotelId))
+        {
+            var hotelUsers = new List<User>();
+
+            foreach (var user in users)
+            {
+                var assignment = await hotelStaffMemberRepository.FindByHotelIdAndUserIdAsync(
+                    query.HotelId,
+                    user.Id,
+                    cancellationToken);
+
+                if (assignment is null || assignment.Status != "active")
+                    continue;
+
+                user.ChangeDefaultHotel(assignment.HotelId);
+                user.ChangeRole(assignment.Role);
+                hotelUsers.Add(user);
+            }
+
+            return hotelUsers;
+        }
+
         foreach (var user in users)
             await ApplyActiveAssignmentAsync(user, cancellationToken);
 

@@ -33,13 +33,15 @@ public class UsersController(
 
     [HttpGet]
     [SwaggerOperation(
-        Summary = "Get all users",
-        Description = "Get all users",
+        Summary = "Get users",
+        Description = "Get users. When hotelId is provided, only active staff members assigned to that hotel are returned.",
         OperationId = "GetAllUsers")]
     [SwaggerResponse(StatusCodes.Status200OK, "The users were found", typeof(IEnumerable<UserResource>))]
-    public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllUsers(
+        [FromQuery] string? hotelId,
+        CancellationToken cancellationToken)
     {
-        var query = new GetAllUsersQuery();
+        var query = new GetAllUsersQuery(hotelId);
         var entities = await queryService.Handle(query, cancellationToken);
         var resources = entities.Select(UserResourceFromEntityAssembler.ToResourceFromEntity);
 

@@ -108,3 +108,23 @@ ConnectionStrings__DefaultConnection=server=<host>;port=3306;database=senit_db;u
 For simple academic deployment, keep `EnsureCreated()` enabled and start with an empty MySQL database. If the model changes after data exists, recreate the database or move to migrations.
 
 The API listens on port `8080` inside the Docker container.
+
+
+## Swagger in Render
+
+Swagger is enabled for the academic/demo deployment in all environments. After deploying, open:
+
+```txt
+https://<your-render-service>.onrender.com/swagger/index.html
+```
+
+The API base URL remains:
+
+```txt
+https://<your-render-service>.onrender.com/api/v1
+```
+
+
+### Hotel-scoped staff listing
+
+Use `GET /api/v1/users?hotelId={hotelId}` to list only active users assigned to a specific hotel through `hotel_staff_members`. The unfiltered endpoint is kept for diagnostics, but the frontend must use the hotel-scoped query.

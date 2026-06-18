@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Senit.Platform.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c8bdc0492e2eab915e61e734a4ae82d0da864042")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2936026c389bf18ce3d43ee6407132febbcc5bcb")]
 [assembly: System.Reflection.AssemblyProductAttribute("Senit.Platform.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Senit.Platform.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
