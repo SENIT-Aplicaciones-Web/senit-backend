@@ -1,0 +1,58 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Senit_002EPlatform_002EAPI_002FFrontDesk_002FResources_002FFrontDeskMessages/@EntryIndexedValue">False</s:Boolean>
+	
+	
+	
+	
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Senit_002EPlatform_002EAPI_002FGuestStay_002FResources_002FGuestStayMessages/@EntryIndexedValue">True</s:Boolean>
+	
+	
+	
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Senit_002EPlatform_002EAPI_002FHousekeeping_002FResources_002FHousekeepingMessages/@EntryIndexedValue">False</s:Boolean>
+	
+	
+	
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Senit_002EPlatform_002EAPI_002FIam_002FResources_002FIamMessages/@EntryIndexedValue">False</s:Boolean>
+	
+	
+	
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Senit_002EPlatform_002EAPI_002FPayment_002FResources_002FPaymentMessages/@EntryIndexedValue">False</s:Boolean>
+	
+	
+	
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Senit_002EPlatform_002EAPI_002FReservation_002FResources_002FReservationMessages/@EntryIndexedValue">False</s:Boolean>
+	
+	
+	
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Senit_002EPlatform_002EAPI_002FRoom_002FResources_002FRoomMessages/@EntryIndexedValue">False</s:Boolean>
+	
+	
+	
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Senit_002EPlatform_002EAPI_002FShared_002FResources_002FCommonMessages/@EntryIndexedValue">False</s:Boolean>
+	
+	
+	
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Senit_002EPlatform_002EAPI_002FShared_002FResources_002FErrors_002FErrorMessages/@EntryIndexedValue">False</s:Boolean>
+	
+	
+	
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Senit_002EPlatform_002EAPI_002FShared_002FResources_002FSharedMessages/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Senit_002EPlatform_002EAPI_002FShared_002FResources_002FSharedMessages/@EntryIndexRemoved">True</s:Boolean>
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Senit_002EPlatform_002EAPI_002FSubscriptionPayment_002FResources_002FSubscriptionPaymentMessages/@EntryIndexedValue">False</s:Boolean>
+	
+	
+	
+	
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/Initialized/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/ShowOnlyErrors/@EntryValue">False</s:Boolean></wpf:ResourceDictionary>

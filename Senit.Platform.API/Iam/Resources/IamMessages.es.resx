@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ResourceNotFound" xml:space="preserve">
+    <value>No se encontró el recurso solicitado.</value>
+  </data>
+  <data name="OperationFailed" xml:space="preserve">
+    <value>No se pudo completar la operación.</value>
+  </data>
+  <data name="InvalidCredentials" xml:space="preserve">
+    <value>Credenciales inválidas.</value>
+  </data>
+  <data name="InvalidRequest" xml:space="preserve">
+    <value>La solicitud de registro está incompleta.</value>
+  </data>
+  <data name="DuplicateEmail" xml:space="preserve">
+    <value>El correo ya está registrado.</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>No se encontró el usuario.</value>
+  </data>
+  <data name="UserNotAssignedToHotel" xml:space="preserve">
+    <value>El usuario no está asignado al hotel seleccionado.</value>
+  </data>
+  <data name="HotelNotFound" xml:space="preserve">
+    <value>El hotel seleccionado no fue encontrado.</value>
+  </data>
+</root>
