@@ -121,3 +121,16 @@ Main operations:
 - `GET /housekeeping`: Retrieves all pending or completed cleaning tasks.
 - `POST /housekeeping`: Creates a new housekeeping task for a specific room.
 - `PUT /housekeeping/{taskId}`: Updates the status of a task (e.g., from pending to completed).
+
+## Consumptions
+
+Endpoint group used to manage products and services consumed by guests during their stay. It allows the registration and tracking of additional charges, helping the hotel maintain accurate billing and improve revenue control.
+
+Base route: `/consumptions`
+
+Main operations:
+
+* `GET /consumptions`: Retrieves all registered consumptions.
+* `POST /consumptions`: Registers a new consumption associated with a guest stay.
+* `PUT /consumptions/{consumptionId}`: Updates an existing consumption record.
+* `DELETE /consumptions/{consumptionId}`: Deletes a consumption record.
