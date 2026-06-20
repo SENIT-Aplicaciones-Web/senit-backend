@@ -147,3 +147,16 @@ Main operations:
 * `POST /invoices`: Creates a new invoice for a guest.
 * `PUT /invoices/{invoiceId}`: Updates invoice information.
 * `DELETE /invoices/{invoiceId}`: Deletes an invoice record.
+
+## Products
+
+Endpoint group used to manage the products available for sale or consumption within the hotel, such as beverages, snacks, amenities and other complementary services. It helps maintain inventory and supports consumption registration.
+
+Base route: `/products`
+
+Main operations:
+
+* `GET /products`: Retrieves all registered products.
+* `POST /products`: Creates a new product.
+* `PUT /products/{productId}`: Updates product information such as name, price or stock.
+* `DELETE /products/{productId}`: Deletes a product from the catalog.
