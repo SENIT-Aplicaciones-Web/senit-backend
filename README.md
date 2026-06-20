@@ -121,3 +121,42 @@ Main operations:
 - `GET /housekeeping`: Retrieves all pending or completed cleaning tasks.
 - `POST /housekeeping`: Creates a new housekeeping task for a specific room.
 - `PUT /housekeeping/{taskId}`: Updates the status of a task (e.g., from pending to completed).
+
+## Consumptions
+
+Endpoint group used to manage products and services consumed by guests during their stay. It allows the registration and tracking of additional charges, helping the hotel maintain accurate billing and improve revenue control.
+
+Base route: `/consumptions`
+
+Main operations:
+
+* `GET /consumptions`: Retrieves all registered consumptions.
+* `POST /consumptions`: Registers a new consumption associated with a guest stay.
+* `PUT /consumptions/{consumptionId}`: Updates an existing consumption record.
+* `DELETE /consumptions/{consumptionId}`: Deletes a consumption record.
+
+## Invoices
+
+Endpoint group used to manage invoices generated from reservations, stays, consumptions and payments. It allows the hotel to issue and track billing documents for guests and maintain financial records.
+
+Base route: `/invoices`
+
+Main operations:
+
+* `GET /invoices`: Retrieves all generated invoices.
+* `POST /invoices`: Creates a new invoice for a guest.
+* `PUT /invoices/{invoiceId}`: Updates invoice information.
+* `DELETE /invoices/{invoiceId}`: Deletes an invoice record.
+
+## Products
+
+Endpoint group used to manage the products available for sale or consumption within the hotel, such as beverages, snacks, amenities and other complementary services. It helps maintain inventory and supports consumption registration.
+
+Base route: `/products`
+
+Main operations:
+
+* `GET /products`: Retrieves all registered products.
+* `POST /products`: Creates a new product.
+* `PUT /products/{productId}`: Updates product information such as name, price or stock.
+* `DELETE /products/{productId}`: Deletes a product from the catalog.
