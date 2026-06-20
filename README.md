@@ -134,3 +134,16 @@ Main operations:
 * `POST /consumptions`: Registers a new consumption associated with a guest stay.
 * `PUT /consumptions/{consumptionId}`: Updates an existing consumption record.
 * `DELETE /consumptions/{consumptionId}`: Deletes a consumption record.
+
+## Invoices
+
+Endpoint group used to manage invoices generated from reservations, stays, consumptions and payments. It allows the hotel to issue and track billing documents for guests and maintain financial records.
+
+Base route: `/invoices`
+
+Main operations:
+
+* `GET /invoices`: Retrieves all generated invoices.
+* `POST /invoices`: Creates a new invoice for a guest.
+* `PUT /invoices/{invoiceId}`: Updates invoice information.
+* `DELETE /invoices/{invoiceId}`: Deletes an invoice record.
