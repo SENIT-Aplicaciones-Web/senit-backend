@@ -20,6 +20,9 @@ Base URL: https://senit-backend.onrender.com/api/v1
 - `/notifications`
 - `/subscriptions`
 - `/subscription-payments`
+- - `/products`
+- `/shifts`
+- `/housekeeping`
 
 ## Test credentials
 
@@ -96,3 +99,25 @@ Main operations:
 - `POST /notifications`: Creates a new notification.
 - `PUT /notifications/{notificationId}`: Updates a notification.
 - `DELETE /notifications/{notificationId}`: Deletes a notification.
+
+### Shifts
+
+Endpoint group used to manage front desk work shifts, including the opening and closing of cash registers to ensure financial control.
+
+Base route: `/shifts`
+
+Main operations:
+- `GET /shifts`: Retrieves the history of all shifts.
+- `POST /shifts`: Opens a new shift with an initial cash amount.
+- `PUT /shifts/{shiftId}`: Closes an active shift, recording the final cash amount.
+
+### Housekeeping
+
+Endpoint group used to manage cleaning and maintenance tasks, assigning them to the staff to streamline room availability.
+
+Base route: `/housekeeping`
+
+Main operations:
+- `GET /housekeeping`: Retrieves all pending or completed cleaning tasks.
+- `POST /housekeeping`: Creates a new housekeeping task for a specific room.
+- `PUT /housekeeping/{taskId}`: Updates the status of a task (e.g., from pending to completed).
