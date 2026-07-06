@@ -23,7 +23,7 @@ public class ReservationRepository(AppDbContext context) : BaseRepository<HotelR
         return await Context.Set<HotelReservation>()
             .AnyAsync(reservation =>
                 reservation.RoomId == roomId &&
-                reservation.Status != "cancelled" &&
+                reservation.Status == "confirmed" &&
                 (excludedId == null || reservation.Id != excludedId) &&
                 startAt < reservation.EndAt &&
                 endAt > reservation.StartAt,
@@ -35,7 +35,8 @@ public class ReservationRepository(AppDbContext context) : BaseRepository<HotelR
         return await Context.Set<HotelReservation>()
             .AnyAsync(reservation =>
                 reservation.RoomId == roomId &&
-                reservation.Status == "confirmed",
+                reservation.Status == "confirmed" &&
+                reservation.EndAt > DateTime.UtcNow,
                 cancellationToken);
     }
 }
