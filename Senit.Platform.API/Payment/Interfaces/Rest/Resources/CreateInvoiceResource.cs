@@ -23,7 +23,7 @@ public class CreateInvoiceResource
     [OpenApiExample("Juan Perez")]
     public string CustomerName { get; init; } = string.Empty;
 
-    [Range(typeof(decimal), "0.01", "99999999", ErrorMessage = "Amount must be greater than zero")]
+    [Range(typeof(decimal), "0.01", "99999999", ErrorMessage = "Amount must be greater than zero", ParseLimitsInInvariantCulture = true, ConvertValueInInvariantCulture = true)]
     [OpenApiExample(80.00)]
     public decimal Amount { get; init; }
 

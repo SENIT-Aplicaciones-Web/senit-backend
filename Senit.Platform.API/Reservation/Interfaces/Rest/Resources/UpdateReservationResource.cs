@@ -53,15 +53,15 @@ public class UpdateReservationResource
     [OpenApiExample("confirmed")]
     public string Status { get; init; } = string.Empty;
 
-    [Range(typeof(decimal), "1", "99999999", ErrorMessage = "Hours must be greater than zero")]
+    [Range(typeof(decimal), "1", "99999999", ErrorMessage = "Hours must be greater than zero", ParseLimitsInInvariantCulture = true, ConvertValueInInvariantCulture = true)]
     [OpenApiExample(4.00)]
     public decimal Hours { get; init; }
 
-    [Range(typeof(decimal), "0", "99999999", ErrorMessage = "Reservation amount must be zero or greater")]
+    [Range(typeof(decimal), "0", "99999999", ErrorMessage = "Reservation amount must be zero or greater", ParseLimitsInInvariantCulture = true, ConvertValueInInvariantCulture = true)]
     [OpenApiExample(80.00)]
     public decimal ReservationAmount { get; init; }
 
-    [Range(typeof(decimal), "0", "99999999", ErrorMessage = "Prepaid amount must be zero or greater")]
+    [Range(typeof(decimal), "0", "99999999", ErrorMessage = "Prepaid amount must be zero or greater", ParseLimitsInInvariantCulture = true, ConvertValueInInvariantCulture = true)]
     [OpenApiExample(80.00)]
     public decimal PrepaidAmount { get; init; }
 

@@ -31,7 +31,7 @@ public class UpdateRoomResource
     [OpenApiExample(2)]
     public int Capacity { get; init; }
 
-    [Range(typeof(decimal), "0.01", "99999999", ErrorMessage = "Price per hour must be greater than zero")]
+    [Range(typeof(decimal), "0.01", "99999999", ErrorMessage = "Price per hour must be greater than zero", ParseLimitsInInvariantCulture = true, ConvertValueInInvariantCulture = true)]
     [OpenApiExample(20.00)]
     public decimal PricePerHour { get; init; }
 

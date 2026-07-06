@@ -22,11 +22,11 @@ public class UpdateConsumptionResource
     [OpenApiExample(2)]
     public int Quantity { get; init; }
 
-    [Range(typeof(decimal), "0.01", "99999999", ErrorMessage = "Unit price must be greater than zero")]
+    [Range(typeof(decimal), "0.01", "99999999", ErrorMessage = "Unit price must be greater than zero", ParseLimitsInInvariantCulture = true, ConvertValueInInvariantCulture = true)]
     [OpenApiExample(5.50)]
     public decimal UnitPrice { get; init; }
 
-    [Range(typeof(decimal), "0.01", "99999999", ErrorMessage = "Amount must be greater than zero")]
+    [Range(typeof(decimal), "0.01", "99999999", ErrorMessage = "Amount must be greater than zero", ParseLimitsInInvariantCulture = true, ConvertValueInInvariantCulture = true)]
     [OpenApiExample(11.00)]
     public decimal Amount { get; init; }
 }

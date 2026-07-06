@@ -23,7 +23,7 @@ public class UpdateSubscriptionResource
     [OpenApiExample("active")]
     public string Status { get; init; } = string.Empty;
 
-    [Range(typeof(decimal), "0", "99999999", ErrorMessage = "Monthly amount must be zero or greater")]
+    [Range(typeof(decimal), "0", "99999999", ErrorMessage = "Monthly amount must be zero or greater", ParseLimitsInInvariantCulture = true, ConvertValueInInvariantCulture = true)]
     [OpenApiExample(49.00)]
     public decimal MonthlyAmount { get; init; }
 

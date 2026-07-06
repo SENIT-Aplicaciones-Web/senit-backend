@@ -53,7 +53,7 @@ public class CreateReservationResource
     [OpenApiExample("confirmed")]
     public string Status { get; init; } = string.Empty;
 
-    [Range(typeof(decimal), "0", "99999999", ErrorMessage = "Prepaid amount must be zero or greater")]
+    [Range(typeof(decimal), "0", "99999999", ErrorMessage = "Prepaid amount must be zero or greater", ParseLimitsInInvariantCulture = true, ConvertValueInInvariantCulture = true)]
     [OpenApiExample(80.00)]
     public decimal PrepaidAmount { get; init; }
 

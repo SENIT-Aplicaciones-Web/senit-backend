@@ -23,7 +23,7 @@ public class CreateSubscriptionPaymentResource
     [OpenApiExample("Basic")]
     public string Plan { get; init; } = string.Empty;
 
-    [Range(typeof(decimal), "0.01", "99999999", ErrorMessage = "Amount must be greater than zero")]
+    [Range(typeof(decimal), "0.01", "99999999", ErrorMessage = "Amount must be greater than zero", ParseLimitsInInvariantCulture = true, ConvertValueInInvariantCulture = true)]
     [OpenApiExample(49.00)]
     public decimal Amount { get; init; }
 
