@@ -4,7 +4,7 @@ using Senit.Platform.API.Iam.Interfaces.Rest.Resources;
 namespace Senit.Platform.API.Iam.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Converts a sign-in resource into a command.
+///     Converts a sign in resource into a command.
 /// </summary>
 public static class SignInCommandFromResourceAssembler
 {

@@ -3,7 +3,7 @@ using Senit.Platform.API.Shared.Domain.Model.Entities;
 namespace Senit.Platform.API.Housekeeping.Domain.Model.Aggregates;
 
 /// <summary>
-///     Represents a cleaning task generated when a room enters cleaning state.
+///     Represents a cleaning task created when a room enters cleaning state.
 /// </summary>
 public class CleaningTask : AuditableEntity
 {

@@ -8,7 +8,7 @@ public static class RoomType
     private static readonly string[] AllowedValues = ["Standard", "Deluxe", "Suite"];
 
     /// <summary>
-    ///     Gets a comma-separated list of allowed room types.
+    ///     Gets a comma separated list of allowed room types.
     /// </summary>
     public static string AllowedValuesDescription => string.Join(", ", AllowedValues);
 
@@ -16,7 +16,7 @@ public static class RoomType
     ///     Determines whether a room type is supported.
     /// </summary>
     /// <param name="type">The room type to validate.</param>
-    /// <returns>True when the room type is supported; otherwise, false.</returns>
+    /// <returns>True when the room type is supported, otherwise false.</returns>
     public static bool IsAllowed(string type)
     {
         return AllowedValues.Any(value => string.Equals(value, type, StringComparison.OrdinalIgnoreCase));

@@ -91,4 +91,12 @@ public class User : AuditableEntity
         Status = "inactive";
     }
 
+    /// <summary>
+    ///     Changes the user password.
+    /// </summary>
+    public void ChangePassword(string password)
+    {
+        Password = password;
+    }
+
 }

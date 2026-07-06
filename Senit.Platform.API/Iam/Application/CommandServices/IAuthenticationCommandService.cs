@@ -10,30 +10,17 @@ namespace Senit.Platform.API.Iam.Application.CommandServices;
 public interface IAuthenticationCommandService
 {
     /// <summary>
-    ///     Handles a sign-in command.
+    ///     Handles a sign in command.
     /// </summary>
-    /// <param name="command">
-    ///     The sign-in command.
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     The cancellation token.
-    /// </param>
-    /// <returns>
-    ///     The authenticated user when credentials are valid.
-    /// </returns>
-    Task<ApplicationResult<User>> Handle(SignInCommand command, CancellationToken cancellationToken = default);
+    Task<ApplicationResult<(User user, string token)>> Handle(SignInCommand command, CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Handles a sign-up command by creating the hotel and its administrator in one use case.
+    ///     Handles a sign up command by creating the hotel and its administrator in one use case.
     /// </summary>
-    /// <param name="command">
-    ///     The sign-up command.
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     The cancellation token.
-    /// </param>
-    /// <returns>
-    ///     The created administrator user.
-    /// </returns>
-    Task<ApplicationResult<User>> Handle(SignUpCommand command, CancellationToken cancellationToken = default);
+    Task<ApplicationResult<(User user, string token)>> Handle(SignUpCommand command, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Handles a password reset request from the public authentication flow.
+    /// </summary>
+    Task<ApplicationResult<bool>> Handle(ResetPasswordCommand command, CancellationToken cancellationToken = default);
 }

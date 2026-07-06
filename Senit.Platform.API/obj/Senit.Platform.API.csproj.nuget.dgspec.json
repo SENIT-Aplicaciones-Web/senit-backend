@@ -58,6 +58,10 @@
               "target": "Package",
               "version": "[3.0.10, )"
             },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[10.0.8, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[10.0.8, )"
@@ -72,6 +76,10 @@
               "target": "Package",
               "version": "[10.0.8, )"
             },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[8.18.0, )"
+            },
             "MySql.EntityFrameworkCore": {
               "target": "Package",
               "version": "[10.0.7, )"
@@ -83,6 +91,10 @@
             "Swashbuckle.AspNetCore.Annotations": {
               "target": "Package",
               "version": "[10.2.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.18.0, )"
             }
           },
           "imports": [

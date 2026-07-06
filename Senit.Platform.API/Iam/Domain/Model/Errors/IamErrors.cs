@@ -10,5 +10,6 @@ public enum IamErrors
     DuplicateEmail,
     UserNotFound,
     UserNotAssignedToHotel,
-    HotelNotFound
+    HotelNotFound,
+    InvalidPassword
 }

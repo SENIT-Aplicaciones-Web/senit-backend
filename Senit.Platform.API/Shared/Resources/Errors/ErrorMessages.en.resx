@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <root>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
@@ -32,5 +32,14 @@
   </data>
   <data name="OperationNotAllowed" xml:space="preserve">
     <value>The operation is not allowed.</value>
+  </data>
+  <data name="ValidationFailedMessage" xml:space="preserve">
+    <value>One or more fields have invalid values</value>
+  </data>
+  <data name="UnauthorizedJwt" xml:space="preserve">
+    <value>Unauthorized missing expired or invalid JWT bearer token</value>
+  </data>
+  <data name="BadRequestInvalidInput" xml:space="preserve">
+    <value>Bad request invalid input values or unsupported allowed values</value>
   </data>
 </root>

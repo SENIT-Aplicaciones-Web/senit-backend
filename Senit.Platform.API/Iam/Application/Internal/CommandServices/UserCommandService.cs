@@ -1,4 +1,4 @@
-using Senit.Platform.API.FrontDesk.Domain.Repositories;
+using Senit.Platform.API.FrontDesk.Interfaces.Acl;
 using Senit.Platform.API.Iam.Application.CommandServices;
 using Senit.Platform.API.Iam.Domain.Model.Aggregates;
 using Senit.Platform.API.Iam.Domain.Model.Commands;
@@ -14,14 +14,13 @@ namespace Senit.Platform.API.Iam.Application.Internal.CommandServices;
 /// </summary>
 public class UserCommandService(
     IUserRepository repository,
-    IHotelRepository hotelRepository,
+    IFrontDeskContextFacade frontDeskContextFacade,
     IHotelStaffMemberRepository hotelStaffMemberRepository,
     IUnitOfWork unitOfWork) : IUserCommandService
 {
     public async Task<ApplicationResult<User>> Handle(CreateUserCommand command, CancellationToken cancellationToken = default)
     {
-        var hotel = await hotelRepository.FindByIdAsync(command.HotelId, cancellationToken);
-        if (hotel == null)
+        if (!await frontDeskContextFacade.HotelExists(command.HotelId, cancellationToken))
             return ApplicationResult<User>.Failure(nameof(IamErrors.HotelNotFound), StatusCodes.Status404NotFound);
 
         if (await repository.ExistsByEmailAsync(command.Email, cancellationToken: cancellationToken))
@@ -58,8 +57,7 @@ public class UserCommandService(
         if (entity == null)
             return ApplicationResult<User>.Failure(nameof(IamErrors.UserNotFound), StatusCodes.Status404NotFound);
 
-        var hotel = await hotelRepository.FindByIdAsync(command.HotelId, cancellationToken);
-        if (hotel == null)
+        if (!await frontDeskContextFacade.HotelExists(command.HotelId, cancellationToken))
             return ApplicationResult<User>.Failure(nameof(IamErrors.HotelNotFound), StatusCodes.Status404NotFound);
 
         if (await repository.ExistsByEmailAsync(command.Email, command.Id, cancellationToken))

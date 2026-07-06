@@ -30,4 +30,43 @@
   <data name="InvalidPlan" xml:space="preserve">
     <value>Only Basic and Pro plans are allowed.</value>
   </data>
+  <data name="Amount must be greater than zero" xml:space="preserve">
+    <value>Amount must be greater than zero</value>
+  </data>
+  <data name="Hotel identifier is required" xml:space="preserve">
+    <value>Hotel identifier is required</value>
+  </data>
+  <data name="Hotel identifier must not exceed 64 characters" xml:space="preserve">
+    <value>Hotel identifier must not exceed 64 characters</value>
+  </data>
+  <data name="Monthly amount must be zero or greater" xml:space="preserve">
+    <value>Monthly amount must be zero or greater</value>
+  </data>
+  <data name="Payment method is required" xml:space="preserve">
+    <value>Payment method is required</value>
+  </data>
+  <data name="Payment method must be cash card transfer or yape" xml:space="preserve">
+    <value>Payment method must be cash card transfer or yape</value>
+  </data>
+  <data name="Plan is required" xml:space="preserve">
+    <value>Plan is required</value>
+  </data>
+  <data name="Plan must be Basic or Pro" xml:space="preserve">
+    <value>Plan must be Basic or Pro</value>
+  </data>
+  <data name="Status is required" xml:space="preserve">
+    <value>Status is required</value>
+  </data>
+  <data name="Status must be active inactive or cancelled" xml:space="preserve">
+    <value>Status must be active inactive or cancelled</value>
+  </data>
+  <data name="Status must be pending paid or cancelled" xml:space="preserve">
+    <value>Status must be pending paid or cancelled</value>
+  </data>
+  <data name="Subscription identifier is required" xml:space="preserve">
+    <value>Subscription identifier is required</value>
+  </data>
+  <data name="Subscription identifier must not exceed 64 characters" xml:space="preserve">
+    <value>Subscription identifier must not exceed 64 characters</value>
+  </data>
 </root>

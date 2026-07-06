@@ -27,4 +27,40 @@
   <data name="InvalidStatus" xml:space="preserve">
     <value>El estado de la habitación debe ser uno de los valores permitidos: {0}.</value>
   </data>
-<data name="InvalidRoomType" xml:space="preserve"><value>El tipo de habitación debe ser uno de los valores permitidos: {0}.</value></data></root>
+  <data name="InvalidRoomType" xml:space="preserve">
+    <value>El tipo de habitación debe ser uno de los valores permitidos: {0}.</value>
+  </data>
+  <data name="Capacity must be between 1 and 50" xml:space="preserve">
+    <value>La capacidad debe estar entre 1 y 50</value>
+  </data>
+  <data name="Floor must be between 1 and 100" xml:space="preserve">
+    <value>El piso debe estar entre 1 y 100</value>
+  </data>
+  <data name="Hotel identifier is required" xml:space="preserve">
+    <value>El identificador del hotel es obligatorio</value>
+  </data>
+  <data name="Hotel identifier must not exceed 64 characters" xml:space="preserve">
+    <value>El identificador del hotel no debe exceder 64 caracteres</value>
+  </data>
+  <data name="Price per hour must be greater than zero" xml:space="preserve">
+    <value>El precio por hora debe ser mayor que cero</value>
+  </data>
+  <data name="Room number is required" xml:space="preserve">
+    <value>El número de habitación es obligatorio</value>
+  </data>
+  <data name="Room number must have 1 to 20 characters" xml:space="preserve">
+    <value>El número de habitación debe tener entre 1 y 20 caracteres</value>
+  </data>
+  <data name="Status is required" xml:space="preserve">
+    <value>El estado es obligatorio</value>
+  </data>
+  <data name="Status must be available cleaning or maintenance" xml:space="preserve">
+    <value>El estado debe ser available cleaning o maintenance</value>
+  </data>
+  <data name="Type is required" xml:space="preserve">
+    <value>El tipo es obligatorio</value>
+  </data>
+  <data name="Type must be Standard Deluxe or Suite" xml:space="preserve">
+    <value>El tipo debe ser Standard Deluxe o Suite</value>
+  </data>
+</root>

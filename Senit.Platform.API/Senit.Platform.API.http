@@ -1,4 +1,4 @@
 @Senit.Platform.API_HostAddress = http://localhost:5026
 
-GET {{Senit.Platform.API_HostAddress}}/api/v1/rooms
+GET {{Senit.Platform.API_HostAddress}}/weatherforecast/
 Accept: application/json

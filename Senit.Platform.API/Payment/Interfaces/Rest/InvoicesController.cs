@@ -30,7 +30,7 @@ public class InvoicesController(
     private readonly IStringLocalizer<PaymentMessages> _contextLocalizer = contextLocalizer;
     private readonly ProblemDetailsFactory _problemDetailsFactory = problemDetailsFactory;
 
-    // Invoices are issued by payment workflows; edition and deletion are not exposed by the current UI.
+    // Invoices are issued by payment workflows, edition and deletion are not exposed by the current UI.
 
     [HttpGet]
     [SwaggerOperation(

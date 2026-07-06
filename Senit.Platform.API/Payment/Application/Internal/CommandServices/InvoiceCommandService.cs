@@ -1,12 +1,11 @@
-using Senit.Platform.API.GuestStay.Domain.Repositories;
-using Senit.Platform.API.Housekeeping.Domain.Model.Aggregates;
-using Senit.Platform.API.Housekeeping.Domain.Repositories;
+using Senit.Platform.API.GuestStay.Interfaces.Acl;
+using Senit.Platform.API.Housekeeping.Interfaces.Acl;
 using Senit.Platform.API.Payment.Application.CommandServices;
 using Senit.Platform.API.Payment.Domain.Model.Aggregates;
 using Senit.Platform.API.Payment.Domain.Model.Commands;
 using Senit.Platform.API.Payment.Domain.Model.Errors;
 using Senit.Platform.API.Payment.Domain.Repositories;
-using Senit.Platform.API.Room.Domain.Repositories;
+using Senit.Platform.API.Room.Interfaces.Acl;
 using Senit.Platform.API.Shared.Application.Model;
 using Senit.Platform.API.Shared.Domain.Repositories;
 
@@ -18,9 +17,9 @@ namespace Senit.Platform.API.Payment.Application.Internal.CommandServices;
 public class InvoiceCommandService(
     IInvoiceRepository repository,
     IPaymentRepository paymentRepository,
-    IGuestStayRepository guestStayRepository,
-    IRoomRepository roomRepository,
-    ICleaningTaskRepository cleaningTaskRepository,
+    IGuestStayContextFacade guestStayContextFacade,
+    IRoomContextFacade roomContextFacade,
+    IHousekeepingContextFacade housekeepingContextFacade,
     IUnitOfWork unitOfWork) : IInvoiceCommandService
 {
     public async Task<ApplicationResult<Invoice>> Handle(CreateInvoiceCommand command, CancellationToken cancellationToken = default)
@@ -44,49 +43,18 @@ public class InvoiceCommandService(
 
         if (!string.IsNullOrWhiteSpace(payment.GuestStayId))
         {
-            var guestStay = await guestStayRepository.FindByIdAsync(payment.GuestStayId, cancellationToken);
-            if (guestStay == null)
+            var actualEndAt = command.IssuedAt == default ? DateTime.UtcNow : command.IssuedAt;
+            var checkout = await guestStayContextFacade.CompleteCheckout(payment.GuestStayId, actualEndAt, cancellationToken);
+            if (checkout == null)
                 return ApplicationResult<Invoice>.Failure(nameof(PaymentErrors.PaymentNotFound), StatusCodes.Status404NotFound);
 
-            var actualEndAt = command.IssuedAt == default ? DateTime.UtcNow : command.IssuedAt;
-
-            guestStay.Update(
-                guestStay.HotelId,
-                guestStay.RoomId,
-                guestStay.GuestId,
-                guestStay.GuestName,
-                guestStay.StartAt,
-                guestStay.ExpectedEndAt,
-                actualEndAt,
-                "finished",
-                guestStay.BaseAmount,
-                guestStay.AdditionalAmount,
-                guestStay.PrepaidAmount,
-                guestStay.TotalAmount,
-                "paid");
-            guestStayRepository.Update(guestStay);
-
-            var room = await roomRepository.FindByIdAsync(guestStay.RoomId, cancellationToken);
-            if (room != null)
-            {
-                room.Update(
-                    room.HotelId,
-                    room.Number,
-                    room.Floor,
-                    room.Type,
-                    room.Capacity,
-                    room.PricePerHour,
-                    "cleaning");
-                roomRepository.Update(room);
-            }
-
-            var cleaningTask = new CleaningTask(
-                Guid.NewGuid().ToString(),
-                guestStay.HotelId,
-                guestStay.RoomId,
+            await roomContextFacade.ChangeRoomStatus(checkout.RoomId, "cleaning", cancellationToken);
+            await housekeepingContextFacade.CreateCleaningTask(
+                checkout.HotelId,
+                checkout.RoomId,
                 "Limpieza posterior a checkout",
-                "pending");
-            await cleaningTaskRepository.AddAsync(cleaningTask, cancellationToken);
+                "pending",
+                cancellationToken);
         }
 
         await unitOfWork.CompleteAsync(cancellationToken);

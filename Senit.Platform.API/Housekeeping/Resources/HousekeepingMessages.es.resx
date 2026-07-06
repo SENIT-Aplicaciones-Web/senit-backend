@@ -21,4 +21,28 @@
   <data name="CleaningTaskNotFound" xml:space="preserve">
     <value>No se encontró la tarea de limpieza.</value>
   </data>
+  <data name="Description is required" xml:space="preserve">
+    <value>La descripción es obligatoria</value>
+  </data>
+  <data name="Description must have 3 to 250 characters" xml:space="preserve">
+    <value>La descripción debe tener entre 3 y 250 caracteres</value>
+  </data>
+  <data name="Hotel identifier is required" xml:space="preserve">
+    <value>El identificador del hotel es obligatorio</value>
+  </data>
+  <data name="Hotel identifier must not exceed 64 characters" xml:space="preserve">
+    <value>El identificador del hotel no debe exceder 64 caracteres</value>
+  </data>
+  <data name="Room identifier is required" xml:space="preserve">
+    <value>El identificador de la habitación es obligatorio</value>
+  </data>
+  <data name="Room identifier must not exceed 64 characters" xml:space="preserve">
+    <value>El identificador de la habitación no debe exceder 64 caracteres</value>
+  </data>
+  <data name="Status is required" xml:space="preserve">
+    <value>El estado es obligatorio</value>
+  </data>
+  <data name="Status must be pending or completed" xml:space="preserve">
+    <value>El estado debe ser pending o completed</value>
+  </data>
 </root>

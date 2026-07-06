@@ -12,7 +12,9 @@ namespace Senit.Platform.API.Iam.Infrastructure.Persistence.EntityFrameworkCore.
 public class HotelStaffMemberRepository(AppDbContext context)
     : BaseRepository<HotelStaffMember>(context), IHotelStaffMemberRepository
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     Finds a staff assignment by hotel and user identifiers.
+    /// </summary>
     public async Task<HotelStaffMember?> FindByHotelIdAndUserIdAsync(
         string hotelId,
         string userId,
@@ -24,7 +26,9 @@ public class HotelStaffMemberRepository(AppDbContext context)
                 cancellationToken);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Finds the first active hotel assignment for a user.
+    /// </summary>
     public async Task<HotelStaffMember?> FindFirstActiveAssignmentByUserIdAsync(
         string userId,
         CancellationToken cancellationToken = default)
@@ -35,7 +39,9 @@ public class HotelStaffMemberRepository(AppDbContext context)
                 cancellationToken);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Checks whether a user has any active hotel assignment.
+    /// </summary>
     public async Task<bool> HasActiveAssignmentAsync(string userId, CancellationToken cancellationToken = default)
     {
         return await Context.Set<HotelStaffMember>()
@@ -44,7 +50,9 @@ public class HotelStaffMemberRepository(AppDbContext context)
                 cancellationToken);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Checks whether a user has an active assignment in a specific hotel.
+    /// </summary>
     public async Task<bool> HasActiveAssignmentAsync(
         string hotelId,
         string userId,
@@ -58,7 +66,9 @@ public class HotelStaffMemberRepository(AppDbContext context)
                 cancellationToken);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Finds an active user assignment excluding a specific hotel.
+    /// </summary>
     public async Task<HotelStaffMember?> FindFirstActiveAssignmentByUserIdExceptHotelAsync(
         string userId,
         string excludedHotelId,

@@ -32,7 +32,7 @@ public class Result<T>
 }
 
 /// <summary>
-///     Non-generic result wrapper used by command services that do not return a value.
+///     Non generic result wrapper used by command services that do not return a value.
 /// </summary>
 public class Result
 {

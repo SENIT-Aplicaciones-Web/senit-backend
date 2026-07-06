@@ -1,15 +1,29 @@
 using Cortex.Mediator.DependencyInjection;
+using Senit.Platform.API.Iam.Infrastructure.Tokens.Jwt.Services;
+using Senit.Platform.API.Iam.Infrastructure.Tokens.Jwt.Configuration;
+using Senit.Platform.API.Iam.Application.Internal.OutboundServices;
+using Microsoft.OpenApi;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Senit.Platform.API.Shared.Domain.Repositories;
 using Senit.Platform.API.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
+using Senit.Platform.API.Shared.Infrastructure.OpenApi;
 using Senit.Platform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using Senit.Platform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using Senit.Platform.API.Shared.Infrastructure.Pipeline.Middleware.Extensions;
 using Senit.Platform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Senit.Platform.API.Resources.Errors;
 using Senit.Platform.API.Resources.Shared;
+using Senit.Platform.API.FrontDesk.Application.Acl;
+using Senit.Platform.API.FrontDesk.Interfaces.Acl;
+using Senit.Platform.API.Iam.Application.Acl;
+using Senit.Platform.API.Iam.Interfaces.Acl;
+using Senit.Platform.API.SubscriptionPayment.Application.Acl;
+using Senit.Platform.API.SubscriptionPayment.Interfaces.Acl;
 using Senit.Platform.API.FrontDesk.Application.CommandServices;
 using Senit.Platform.API.FrontDesk.Application.Internal.CommandServices;
 using Senit.Platform.API.FrontDesk.Application.Internal.QueryServices;
@@ -23,6 +37,8 @@ using Senit.Platform.API.Iam.Application.Internal.QueryServices;
 using Senit.Platform.API.Iam.Application.QueryServices;
 using Senit.Platform.API.Iam.Domain.Repositories;
 using Senit.Platform.API.Iam.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using Senit.Platform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
+using Senit.Platform.API.Iam.Infrastructure.Pipeline.Middleware.Extensions;
 using Senit.Platform.API.Iam.Resources;
 using Senit.Platform.API.Room.Application.CommandServices;
 using Senit.Platform.API.Room.Application.Internal.CommandServices;
@@ -66,12 +82,51 @@ using Senit.Platform.API.SubscriptionPayment.Application.QueryServices;
 using Senit.Platform.API.SubscriptionPayment.Domain.Repositories;
 using Senit.Platform.API.SubscriptionPayment.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using Senit.Platform.API.SubscriptionPayment.Resources;
+using Senit.Platform.API.Housekeeping.Interfaces.Acl;
+using Senit.Platform.API.Housekeeping.Application.Acl;
+using Senit.Platform.API.GuestStay.Interfaces.Acl;
+using Senit.Platform.API.GuestStay.Application.Acl;
+using Senit.Platform.API.Reservation.Interfaces.Acl;
+using Senit.Platform.API.Reservation.Application.Acl;
+using Senit.Platform.API.Room.Interfaces.Acl;
+using Senit.Platform.API.Room.Application.Acl;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.AddControllers(options => options.Conventions.Add(new KebabCaseRouteNamingConvention()))
+builder.Services.AddControllers(options =>
+    {
+        options.Conventions.Add(new KebabCaseRouteNamingConvention());
+        options.Filters.Add(new AuthorizeAttribute());
+    })
     .AddDataAnnotationsLocalization();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errorLocalizer = context.HttpContext.RequestServices
+            .GetRequiredService<IStringLocalizer<ErrorMessages>>();
+        var validationLocalizer = ResolveValidationLocalizer(
+            context.HttpContext.RequestServices,
+            context.ActionDescriptor);
+
+        var errors = context.ModelState
+            .Where(entry => entry.Value?.Errors.Count > 0)
+            .ToDictionary(
+                entry => entry.Key,
+                entry => entry.Value!.Errors
+                    .Select(error => validationLocalizer[error.ErrorMessage].Value)
+                    .ToArray());
+
+        return new BadRequestObjectResult(new
+        {
+            code = "ValidationFailed",
+            message = errorLocalizer["ValidationFailedMessage"].Value,
+            errors
+        });
+    };
+});
 
 builder.Services.AddProblemDetails();
 
@@ -114,8 +169,36 @@ builder.Services.AddSingleton<ProblemDetailsFactory>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Senit Platform API",
+        Version = "v1",
+        Description = "Senit Platform API provides endpoints for hotel operations, rooms, reservations, guest stays, payments, housekeeping, subscriptions and user access management"
+    });
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Paste the JWT bearer token returned by sign in. Swagger saves the value here but protected endpoints still validate the token on each request.",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"
+    });
+
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+        { [new OpenApiSecuritySchemeReference("Bearer", document)] = [] });
+
+    options.OperationFilter<AllowAnonymousOperationFilter>();
+    options.SchemaFilter<ResourceExampleSchemaFilter>();
     options.EnableAnnotations();
 });
+
+builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
+var tokenSettings = builder.Configuration.GetSection("TokenSettings").Get<TokenSettings>()
+    ?? throw new InvalidOperationException("TokenSettings section is not configured.");
+if (string.IsNullOrWhiteSpace(tokenSettings.Secret))
+    throw new InvalidOperationException("TokenSettings:Secret is not configured.");
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
@@ -124,6 +207,7 @@ builder.Services.AddScoped<IHotelQueryService, HotelQueryService>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationCommandService, NotificationCommandService>();
 builder.Services.AddScoped<INotificationQueryService, NotificationQueryService>();
+builder.Services.AddScoped<IFrontDeskContextFacade, FrontDeskContextFacade>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IHotelStaffMemberRepository, HotelStaffMemberRepository>();
 builder.Services.AddScoped<IUserCommandService, UserCommandService>();
@@ -158,8 +242,15 @@ builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>(
 builder.Services.AddScoped<ISubscriptionPaymentRepository, SubscriptionPaymentRepository>();
 builder.Services.AddScoped<ISubscriptionPaymentCommandService, SubscriptionPaymentCommandService>();
 builder.Services.AddScoped<ISubscriptionPaymentQueryService, SubscriptionPaymentQueryService>();
+builder.Services.AddScoped<ISubscriptionPaymentContextFacade, SubscriptionPaymentContextFacade>();
 builder.Services.AddScoped<IAuthenticationCommandService, AuthenticationCommandService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
 
+builder.Services.AddScoped<IRoomContextFacade, RoomContextFacade>();
+builder.Services.AddScoped<IReservationContextFacade, ReservationContextFacade>();
+builder.Services.AddScoped<IGuestStayContextFacade, GuestStayContextFacade>();
+builder.Services.AddScoped<IHousekeepingContextFacade, HousekeepingContextFacade>();
 builder.Services.AddCortexMediator([typeof(Program)]);
 
 var app = builder.Build();
@@ -184,8 +275,41 @@ app.UseRequestLocalization(localizationOptions);
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseRouting();
 app.UseCors("AllowAllPolicy");
+app.UseRequestAuthorization();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+
+static IStringLocalizer ResolveValidationLocalizer(IServiceProvider services, ActionDescriptor actionDescriptor)
+{
+    var controllerNamespace = (actionDescriptor as ControllerActionDescriptor)?.ControllerTypeInfo.Namespace ?? string.Empty;
+
+    if (controllerNamespace.Contains(".FrontDesk."))
+        return services.GetRequiredService<IStringLocalizer<FrontDeskMessages>>();
+
+    if (controllerNamespace.Contains(".Iam."))
+        return services.GetRequiredService<IStringLocalizer<IamMessages>>();
+
+    if (controllerNamespace.Contains(".Room."))
+        return services.GetRequiredService<IStringLocalizer<RoomMessages>>();
+
+    if (controllerNamespace.Contains(".Reservation."))
+        return services.GetRequiredService<IStringLocalizer<ReservationMessages>>();
+
+    if (controllerNamespace.Contains(".GuestStay."))
+        return services.GetRequiredService<IStringLocalizer<GuestStayMessages>>();
+
+    if (controllerNamespace.Contains(".Payment."))
+        return services.GetRequiredService<IStringLocalizer<PaymentMessages>>();
+
+    if (controllerNamespace.Contains(".Housekeeping."))
+        return services.GetRequiredService<IStringLocalizer<HousekeepingMessages>>();
+
+    if (controllerNamespace.Contains(".SubscriptionPayment."))
+        return services.GetRequiredService<IStringLocalizer<SubscriptionPaymentMessages>>();
+
+    return services.GetRequiredService<IStringLocalizer<ErrorMessages>>();
+}

@@ -4,9 +4,9 @@ using Senit.Platform.API.GuestStay.Domain.Model.Commands;
 using Senit.Platform.API.GuestStay.Domain.Repositories;
 using Senit.Platform.API.Shared.Application.Model;
 using Senit.Platform.API.Shared.Domain.Repositories;
-using Senit.Platform.API.Room.Domain.Repositories;
-using Senit.Platform.API.Reservation.Domain.Repositories;
 using Senit.Platform.API.GuestStay.Domain.Model.Errors;
+using Senit.Platform.API.Reservation.Interfaces.Acl;
+using Senit.Platform.API.Room.Interfaces.Acl;
 
 namespace Senit.Platform.API.GuestStay.Application.Internal.CommandServices;
 
@@ -16,8 +16,8 @@ namespace Senit.Platform.API.GuestStay.Application.Internal.CommandServices;
 public class GuestStayCommandService(
     IGuestStayRepository repository,
     IUnitOfWork unitOfWork,
-    IRoomRepository roomRepository,
-    IReservationRepository reservationRepository) : IGuestStayCommandService
+    IRoomContextFacade roomContextFacade,
+    IReservationContextFacade reservationContextFacade) : IGuestStayCommandService
 {
     public async Task<ApplicationResult<GuestStayRecord>> Handle(CreateGuestStayCommand command, CancellationToken cancellationToken = default)
     {
@@ -28,7 +28,7 @@ public class GuestStayCommandService(
         if (duration.Ticks % TimeSpan.FromHours(1).Ticks != 0)
             return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.InvalidDurationHours), StatusCodes.Status400BadRequest);
 
-        var room = await roomRepository.FindByIdAsync(command.RoomId, cancellationToken);
+        var room = await roomContextFacade.FindRoomById(command.RoomId, cancellationToken);
         if (room == null)
             return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.StayNotFound), StatusCodes.Status404NotFound);
 
@@ -38,7 +38,7 @@ public class GuestStayCommandService(
         if (await repository.ExistsActiveStayByRoomIdAsync(command.RoomId, cancellationToken: cancellationToken))
             return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.RoomHasActiveStay), StatusCodes.Status409Conflict);
 
-        if (await reservationRepository.ExistsOverlappingReservationAsync(command.RoomId, command.StartAt, command.ExpectedEndAt, cancellationToken: cancellationToken))
+        if (await reservationContextFacade.HasOverlappingReservation(command.RoomId, command.StartAt, command.ExpectedEndAt, cancellationToken: cancellationToken))
             return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.ReservationOverlap), StatusCodes.Status409Conflict);
         var entity = new GuestStayRecord(
             Guid.NewGuid().ToString(),
@@ -58,17 +58,8 @@ public class GuestStayCommandService(
 
         await repository.AddAsync(entity, cancellationToken);
 
-        room.Update(
-            room.HotelId,
-            room.Number,
-            room.Floor,
-            room.Type,
-            room.Capacity,
-            room.PricePerHour,
-            "occupied");
-        roomRepository.Update(room);
-
         await unitOfWork.CompleteAsync(cancellationToken);
+        await roomContextFacade.ChangeRoomStatus(command.RoomId, "occupied", cancellationToken);
 
         return ApplicationResult<GuestStayRecord>.Created(entity);
     }

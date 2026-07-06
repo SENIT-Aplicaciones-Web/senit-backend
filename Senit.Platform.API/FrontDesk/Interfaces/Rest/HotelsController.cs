@@ -4,8 +4,7 @@ using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Annotations;
 using Senit.Platform.API.Shared.Interfaces.Rest.Transform;
 using Senit.Platform.API.Iam.Resources;
-using Senit.Platform.API.Iam.Domain.Model.Commands;
-using Senit.Platform.API.Iam.Application.CommandServices;
+using Senit.Platform.API.Iam.Interfaces.Acl;
 using Senit.Platform.API.FrontDesk.Application.CommandServices;
 using Senit.Platform.API.FrontDesk.Application.QueryServices;
 using Senit.Platform.API.FrontDesk.Domain.Model.Commands;
@@ -27,18 +26,18 @@ namespace Senit.Platform.API.FrontDesk.Interfaces.Rest;
 public class HotelsController(
     IHotelQueryService queryService,
     IHotelCommandService commandService,
-    IUserCommandService userCommandService,
+    IIamContextFacade iamContextFacade,
     IStringLocalizer<FrontDeskMessages> contextLocalizer,
     IStringLocalizer<IamMessages> iamLocalizer,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
 {
-    private readonly IUserCommandService _userCommandService = userCommandService;
+    private readonly IIamContextFacade _iamContextFacade = iamContextFacade;
     private readonly IStringLocalizer<FrontDeskMessages> _contextLocalizer = contextLocalizer;
     private readonly IStringLocalizer<IamMessages> _iamLocalizer = iamLocalizer;
     private readonly ProblemDetailsFactory _problemDetailsFactory = problemDetailsFactory;
 
-    // Hotel creation is handled by the sign-up use case to ensure every hotel has an administrator.
+    // Hotel creation is handled by the sign up use case to ensure every hotel has an administrator.
 
     [HttpGet]
     [SwaggerOperation(
@@ -95,16 +94,17 @@ public class HotelsController(
         [FromRoute] string userId,
         CancellationToken cancellationToken)
     {
-        var command = new RemoveUserFromHotelCommand(hotelId, userId);
-        var result = await _userCommandService.Handle(command, cancellationToken);
+        var removed = await _iamContextFacade.RemoveUserFromHotel(hotelId, userId, cancellationToken);
+        if (!removed)
+        {
+            return _problemDetailsFactory.CreateErrorProblemDetails(
+                this,
+                StatusCodes.Status409Conflict,
+                "UserNotAssignedToHotel",
+                _iamLocalizer);
+        }
 
-        return ActionResultAssembler.ToActionResultFromDeleteResult(
-            this,
-            result,
-            _iamLocalizer,
-            _problemDetailsFactory,
-            () => NoContent()
-        );
+        return NoContent();
     }
 
 }

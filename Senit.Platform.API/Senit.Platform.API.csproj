@@ -12,6 +12,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.8" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.18.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.18.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.8" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.8" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.8">
@@ -52,6 +55,36 @@
         </EmbeddedResource>
         <EmbeddedResource Update="SubscriptionPayment\Resources\SubscriptionPaymentMessages.es.resx">
             <DependentUpon>SubscriptionPaymentMessages.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="SubscriptionPayment\Resources\SubscriptionPaymentMessages.en.resx">
+          <DependentUpon>SubscriptionPaymentMessages.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Shared\Resources\CommonMessages.en.resx">
+          <DependentUpon>CommonMessages.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Shared\Resources\CommonMessages.es.resx">
+          <DependentUpon>CommonMessages.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Shared\Resources\Errors\ErrorMessages.en.resx">
+          <DependentUpon>ErrorMessages.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Room\Resources\RoomMessages.en.resx">
+          <DependentUpon>RoomMessages.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Reservation\Resources\ReservationMessages.en.resx">
+          <DependentUpon>ReservationMessages.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Payment\Resources\PaymentMessages.en.resx">
+          <DependentUpon>PaymentMessages.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Iam\Resources\IamMessages.en.resx">
+          <DependentUpon>IamMessages.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Housekeeping\Resources\HousekeepingMessages.en.resx">
+          <DependentUpon>HousekeepingMessages.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="GuestStay\Resources\GuestStayMessages.en.resx">
+          <DependentUpon>GuestStayMessages.cs</DependentUpon>
         </EmbeddedResource>
     </ItemGroup>
 

@@ -27,4 +27,40 @@
   <data name="InvalidStatus" xml:space="preserve">
     <value>The room status must be one of the allowed values: {0}.</value>
   </data>
-<data name="InvalidRoomType" xml:space="preserve"><value>The room type must be one of the allowed values: {0}.</value></data></root>
+  <data name="InvalidRoomType" xml:space="preserve">
+    <value>The room type must be one of the allowed values: {0}.</value>
+  </data>
+  <data name="Capacity must be between 1 and 50" xml:space="preserve">
+    <value>Capacity must be between 1 and 50</value>
+  </data>
+  <data name="Floor must be between 1 and 100" xml:space="preserve">
+    <value>Floor must be between 1 and 100</value>
+  </data>
+  <data name="Hotel identifier is required" xml:space="preserve">
+    <value>Hotel identifier is required</value>
+  </data>
+  <data name="Hotel identifier must not exceed 64 characters" xml:space="preserve">
+    <value>Hotel identifier must not exceed 64 characters</value>
+  </data>
+  <data name="Price per hour must be greater than zero" xml:space="preserve">
+    <value>Price per hour must be greater than zero</value>
+  </data>
+  <data name="Room number is required" xml:space="preserve">
+    <value>Room number is required</value>
+  </data>
+  <data name="Room number must have 1 to 20 characters" xml:space="preserve">
+    <value>Room number must have 1 to 20 characters</value>
+  </data>
+  <data name="Status is required" xml:space="preserve">
+    <value>Status is required</value>
+  </data>
+  <data name="Status must be available cleaning or maintenance" xml:space="preserve">
+    <value>Status must be available cleaning or maintenance</value>
+  </data>
+  <data name="Type is required" xml:space="preserve">
+    <value>Type is required</value>
+  </data>
+  <data name="Type must be Standard Deluxe or Suite" xml:space="preserve">
+    <value>Type must be Standard Deluxe or Suite</value>
+  </data>
+</root>

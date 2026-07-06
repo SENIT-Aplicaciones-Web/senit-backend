@@ -30,7 +30,7 @@ public class GuestsController(
     private readonly IStringLocalizer<GuestStayMessages> _contextLocalizer = contextLocalizer;
     private readonly ProblemDetailsFactory _problemDetailsFactory = problemDetailsFactory;
 
-    // Guests are created during reservation or check-in flows; direct edition is not exposed by the current UI.
+    // Guests are created during reservation or check in flows, direct edition is not exposed by the current UI.
 
     [HttpGet]
     [SwaggerOperation(

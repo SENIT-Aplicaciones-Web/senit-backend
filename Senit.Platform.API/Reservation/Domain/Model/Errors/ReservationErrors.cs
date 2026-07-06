@@ -11,5 +11,13 @@ public enum ReservationErrors
     InvalidGuestsQuantity,
     ReservationOverlap,
     InvalidDateRange,
-    InvalidDurationHours
+    InvalidDurationHours,
+    InvalidRequest,
+    InvalidGuestName,
+    InvalidDni,
+    InvalidPhone,
+    InvalidEmail,
+    InvalidPaymentMethod,
+    InvalidReservationStatus,
+    InvalidPrepaidAmount
 }

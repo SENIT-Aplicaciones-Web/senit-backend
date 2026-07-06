@@ -30,7 +30,7 @@ public class ReservationsController(
     private readonly IStringLocalizer<ReservationMessages> _contextLocalizer = contextLocalizer;
     private readonly ProblemDetailsFactory _problemDetailsFactory = problemDetailsFactory;
 
-    // Reservations can be created or cancelled through updates; deletion is not exposed by the current UI.
+    // Reservations can be created or cancelled through updates, deletion is not exposed by the current UI.
 
     [HttpGet]
     [SwaggerOperation(

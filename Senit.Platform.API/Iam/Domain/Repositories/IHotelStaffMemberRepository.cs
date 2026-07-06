@@ -14,7 +14,7 @@ public interface IHotelStaffMemberRepository : IBaseRepository<HotelStaffMember>
     /// <param name="hotelId">Hotel identifier.</param>
     /// <param name="userId">User identifier.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The staff assignment when it exists; otherwise, null.</returns>
+    /// <returns>The staff assignment when it exists, otherwise null.</returns>
     Task<HotelStaffMember?> FindByHotelIdAndUserIdAsync(
         string hotelId,
         string userId,
@@ -25,7 +25,7 @@ public interface IHotelStaffMemberRepository : IBaseRepository<HotelStaffMember>
     /// </summary>
     /// <param name="userId">User identifier.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The active staff assignment when it exists; otherwise, null.</returns>
+    /// <returns>The active staff assignment when it exists, otherwise null.</returns>
     Task<HotelStaffMember?> FindFirstActiveAssignmentByUserIdAsync(
         string userId,
         CancellationToken cancellationToken = default);
@@ -35,7 +35,7 @@ public interface IHotelStaffMemberRepository : IBaseRepository<HotelStaffMember>
     /// </summary>
     /// <param name="userId">User identifier.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>True when the user has an active assignment; otherwise, false.</returns>
+    /// <returns>True when the user has an active assignment, otherwise false.</returns>
     Task<bool> HasActiveAssignmentAsync(string userId, CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -44,7 +44,7 @@ public interface IHotelStaffMemberRepository : IBaseRepository<HotelStaffMember>
     /// <param name="hotelId">Hotel identifier.</param>
     /// <param name="userId">User identifier.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>True when the user is active in the hotel; otherwise, false.</returns>
+    /// <returns>True when the user is active in the hotel, otherwise false.</returns>
     Task<bool> HasActiveAssignmentAsync(
         string hotelId,
         string userId,
@@ -56,7 +56,7 @@ public interface IHotelStaffMemberRepository : IBaseRepository<HotelStaffMember>
     /// <param name="userId">User identifier.</param>
     /// <param name="excludedHotelId">Hotel identifier to exclude.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The active staff assignment when it exists; otherwise, null.</returns>
+    /// <returns>The active staff assignment when it exists, otherwise null.</returns>
     Task<HotelStaffMember?> FindFirstActiveAssignmentByUserIdExceptHotelAsync(
         string userId,
         string excludedHotelId,

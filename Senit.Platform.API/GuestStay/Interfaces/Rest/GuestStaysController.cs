@@ -29,7 +29,7 @@ public class GuestStaysController(
     private readonly IStringLocalizer<GuestStayMessages> _contextLocalizer = contextLocalizer;
     private readonly ProblemDetailsFactory _problemDetailsFactory = problemDetailsFactory;
 
-    // Guest stays are created through check-in. Checkout is completed by payment and invoice workflows.
+    // Guest stays are created through check in. Checkout is completed by payment and invoice workflows.
 
     [HttpGet]
     [SwaggerOperation(

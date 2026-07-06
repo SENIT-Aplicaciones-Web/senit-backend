@@ -30,4 +30,43 @@
   <data name="InvalidPlan" xml:space="preserve">
     <value>Solo se permiten los planes Basic y Pro.</value>
   </data>
+  <data name="Amount must be greater than zero" xml:space="preserve">
+    <value>El monto debe ser mayor que cero</value>
+  </data>
+  <data name="Hotel identifier is required" xml:space="preserve">
+    <value>El identificador del hotel es obligatorio</value>
+  </data>
+  <data name="Hotel identifier must not exceed 64 characters" xml:space="preserve">
+    <value>El identificador del hotel no debe exceder 64 caracteres</value>
+  </data>
+  <data name="Monthly amount must be zero or greater" xml:space="preserve">
+    <value>El monto mensual debe ser cero o mayor</value>
+  </data>
+  <data name="Payment method is required" xml:space="preserve">
+    <value>El método de pago es obligatorio</value>
+  </data>
+  <data name="Payment method must be cash card transfer or yape" xml:space="preserve">
+    <value>El método de pago debe ser cash card transfer o yape</value>
+  </data>
+  <data name="Plan is required" xml:space="preserve">
+    <value>El plan es obligatorio</value>
+  </data>
+  <data name="Plan must be Basic or Pro" xml:space="preserve">
+    <value>El plan debe ser Basic o Pro</value>
+  </data>
+  <data name="Status is required" xml:space="preserve">
+    <value>El estado es obligatorio</value>
+  </data>
+  <data name="Status must be active inactive or cancelled" xml:space="preserve">
+    <value>El estado debe ser active inactive o cancelled</value>
+  </data>
+  <data name="Status must be pending paid or cancelled" xml:space="preserve">
+    <value>El estado debe ser pending paid o cancelled</value>
+  </data>
+  <data name="Subscription identifier is required" xml:space="preserve">
+    <value>El identificador de la suscripción es obligatorio</value>
+  </data>
+  <data name="Subscription identifier must not exceed 64 characters" xml:space="preserve">
+    <value>El identificador de la suscripción no debe exceder 64 caracteres</value>
+  </data>
 </root>

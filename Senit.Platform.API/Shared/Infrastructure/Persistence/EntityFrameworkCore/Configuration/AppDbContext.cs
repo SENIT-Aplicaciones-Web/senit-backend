@@ -17,14 +17,18 @@ namespace Senit.Platform.API.Shared.Infrastructure.Persistence.EntityFrameworkCo
 /// </summary>
 public class AppDbContext(DbContextOptions options) : DbContext(options)
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     Configures Entity Framework Core interceptors for the application database context.
+    /// </summary>
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
         builder.AddInterceptors(new AuditableEntityInterceptor());
         base.OnConfiguring(builder);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Applies bounded context mappings and shared naming conventions to the database model.
+    /// </summary>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

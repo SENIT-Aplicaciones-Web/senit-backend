@@ -42,6 +42,22 @@ public static class UserActionResultAssembler
             onCreated);
     }
 
+
+    public static IActionResult ToActionResultFromAuthenticatedUserResult(
+        ControllerBase controller,
+        ApplicationResult<(User user, string token)> result,
+        IStringLocalizer localizer,
+        ProblemDetailsFactory problemDetailsFactory,
+        Func<(User user, string token), IActionResult> onCreated)
+    {
+        return ActionResultAssembler.ToActionResultFromCommandResult(
+            controller,
+            result,
+            localizer,
+            problemDetailsFactory,
+            onCreated);
+    }
+
     public static IActionResult ToActionResultFromUpdateUserResult(
         ControllerBase controller,
         ApplicationResult<User> result,

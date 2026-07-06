@@ -38,10 +38,10 @@ public static class ActionResultAssembler
         ApplicationResult<TEntity> result,
         IStringLocalizer localizer,
         ProblemDetailsFactory problemDetailsFactory,
-        Func<TEntity, IActionResult> onSuccess) where TEntity : class
+        Func<TEntity, IActionResult> onSuccess)
     {
-        if (result.IsSuccess && result.Value is not null)
-            return onSuccess(result.Value);
+        if (result.IsSuccess)
+            return onSuccess(result.Value!);
 
         return problemDetailsFactory.CreateErrorProblemDetails(
             controller,

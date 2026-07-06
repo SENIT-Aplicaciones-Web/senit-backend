@@ -30,7 +30,7 @@ public class SubscriptionsController(
     private readonly IStringLocalizer<SubscriptionPaymentMessages> _contextLocalizer = contextLocalizer;
     private readonly ProblemDetailsFactory _problemDetailsFactory = problemDetailsFactory;
 
-    // Subscriptions are consulted and updated through plan changes; direct creation and deletion are not exposed by the current UI.
+    // Subscriptions are consulted through plan changes. Direct creation and deletion are not exposed by the current UI.
 
     [HttpGet]
     [SwaggerOperation(

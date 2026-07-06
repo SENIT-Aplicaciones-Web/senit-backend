@@ -4,7 +4,7 @@ using Senit.Platform.API.Shared.Infrastructure.Interfaces.AspNetCore.Configurati
 namespace Senit.Platform.API.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 
 /// <summary>
-///     Replaces controller route tokens with kebab-case names.
+///     Replaces controller route tokens with kebab case names.
 /// </summary>
 public class KebabCaseRouteNamingConvention : IControllerModelConvention
 {
