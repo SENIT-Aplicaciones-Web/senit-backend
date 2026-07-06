@@ -9,5 +9,6 @@ public enum RoomErrors
     DuplicateRoomNumber,
     InvalidStatus,
     InvalidRoomType,
-    RoomHasActiveStay
+    RoomHasActiveStay,
+    RoomHasConfirmedReservation
 }

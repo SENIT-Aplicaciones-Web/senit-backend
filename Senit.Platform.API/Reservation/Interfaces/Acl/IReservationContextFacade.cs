@@ -14,4 +14,11 @@ public interface IReservationContextFacade
         DateTime endAt,
         string? excludedReservationId = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Checks whether a room has any confirmed reservation.
+    /// </summary>
+    Task<bool> HasConfirmedReservationByRoomId(
+        string roomId,
+        CancellationToken cancellationToken = default);
 }

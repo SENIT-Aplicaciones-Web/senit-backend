@@ -10,4 +10,5 @@ public interface IReservationRepository : IBaseRepository<HotelReservation>
 {
     Task<IEnumerable<HotelReservation>> ListByHotelIdAsync(string hotelId, CancellationToken cancellationToken = default);
     Task<bool> ExistsOverlappingReservationAsync(string roomId, DateTime startAt, DateTime endAt, string? excludedId = null, CancellationToken cancellationToken = default);
+    Task<bool> ExistsConfirmedReservationByRoomIdAsync(string roomId, CancellationToken cancellationToken = default);
 }

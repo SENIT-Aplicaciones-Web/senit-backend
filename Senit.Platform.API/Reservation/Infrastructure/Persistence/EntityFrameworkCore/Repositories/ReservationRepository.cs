@@ -29,4 +29,13 @@ public class ReservationRepository(AppDbContext context) : BaseRepository<HotelR
                 endAt > reservation.StartAt,
                 cancellationToken);
     }
+
+    public async Task<bool> ExistsConfirmedReservationByRoomIdAsync(string roomId, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<HotelReservation>()
+            .AnyAsync(reservation =>
+                reservation.RoomId == roomId &&
+                reservation.Status == "confirmed",
+                cancellationToken);
+    }
 }

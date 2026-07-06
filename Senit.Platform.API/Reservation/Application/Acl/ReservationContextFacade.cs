@@ -25,4 +25,14 @@ public class ReservationContextFacade(IReservationRepository reservationReposito
             excludedReservationId,
             cancellationToken);
     }
+
+    /// <summary>
+    ///     Checks whether a room has any confirmed reservation.
+    /// </summary>
+    public async Task<bool> HasConfirmedReservationByRoomId(
+        string roomId,
+        CancellationToken cancellationToken = default)
+    {
+        return await reservationRepository.ExistsConfirmedReservationByRoomIdAsync(roomId, cancellationToken);
+    }
 }

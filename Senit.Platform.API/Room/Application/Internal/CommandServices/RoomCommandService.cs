@@ -6,6 +6,8 @@ using Senit.Platform.API.Shared.Application.Model;
 using Senit.Platform.API.Shared.Domain.Repositories;
 using Senit.Platform.API.Room.Domain.Model.Errors;
 using Senit.Platform.API.Room.Domain.Model.ValueObjects;
+using Senit.Platform.API.GuestStay.Interfaces.Acl;
+using Senit.Platform.API.Reservation.Interfaces.Acl;
 
 namespace Senit.Platform.API.Room.Application.Internal.CommandServices;
 
@@ -14,7 +16,9 @@ namespace Senit.Platform.API.Room.Application.Internal.CommandServices;
 /// </summary>
 public class RoomCommandService(
     IRoomRepository repository,
-    IUnitOfWork unitOfWork) : IRoomCommandService
+    IUnitOfWork unitOfWork,
+    IGuestStayContextFacade guestStayContextFacade,
+    IReservationContextFacade reservationContextFacade) : IRoomCommandService
 {
     public async Task<ApplicationResult<RoomEntity>> Handle(CreateRoomCommand command, CancellationToken cancellationToken = default)
     {
@@ -56,6 +60,9 @@ public class RoomCommandService(
         if (entity == null)
             return ApplicationResult<RoomEntity>.Failure(nameof(RoomErrors.RoomNotFound), StatusCodes.Status404NotFound);
 
+        if (await guestStayContextFacade.HasActiveStayByRoomId(command.Id, cancellationToken: cancellationToken))
+            return ApplicationResult<RoomEntity>.Failure(nameof(RoomErrors.RoomHasActiveStay), StatusCodes.Status409Conflict);
+
         var roomNumber = new RoomNumber(command.Number);
         if (await repository.ExistsByHotelIdAndNumberAsync(command.HotelId, roomNumber.Value, command.Id, cancellationToken))
             return ApplicationResult<RoomEntity>.Failure(nameof(RoomErrors.DuplicateRoomNumber), StatusCodes.Status409Conflict, command.Number);
@@ -92,6 +99,12 @@ public class RoomCommandService(
         var entity = await repository.FindByIdAsync(command.Id, cancellationToken);
         if (entity == null)
             return ApplicationResult<bool>.Failure(nameof(RoomErrors.RoomNotFound), StatusCodes.Status404NotFound);
+
+        if (await guestStayContextFacade.HasActiveStayByRoomId(command.Id, cancellationToken: cancellationToken))
+            return ApplicationResult<bool>.Failure(nameof(RoomErrors.RoomHasActiveStay), StatusCodes.Status409Conflict);
+
+        if (await reservationContextFacade.HasConfirmedReservationByRoomId(command.Id, cancellationToken))
+            return ApplicationResult<bool>.Failure(nameof(RoomErrors.RoomHasConfirmedReservation), StatusCodes.Status409Conflict);
 
         repository.Remove(entity);
         await unitOfWork.CompleteAsync(cancellationToken);

@@ -63,4 +63,10 @@
   <data name="Type must be Standard Deluxe or Suite" xml:space="preserve">
     <value>Type must be Standard Deluxe or Suite</value>
   </data>
+  <data name="RoomHasActiveStay" xml:space="preserve">
+    <value>The room has an active stay and cannot be modified manually.</value>
+  </data>
+  <data name="RoomHasConfirmedReservation" xml:space="preserve">
+    <value>The room has a confirmed reservation and cannot be deleted.</value>
+  </data>
 </root>
