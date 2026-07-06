@@ -43,6 +43,9 @@ public class ReservationCommandService(
         if (!requestedRange.IsValid())
             return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.InvalidDateRange), StatusCodes.Status400BadRequest);
 
+        if (command.StartAt < DateTime.UtcNow.AddMinutes(-5))
+            return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.StartDateInPast), StatusCodes.Status400BadRequest);
+
         var duration = command.EndAt - command.StartAt;
         if (duration.Ticks % TimeSpan.FromHours(1).Ticks != 0)
             return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.InvalidDurationHours), StatusCodes.Status400BadRequest);
@@ -60,7 +63,7 @@ public class ReservationCommandService(
         if (await repository.ExistsOverlappingReservationAsync(command.RoomId, command.StartAt, command.EndAt, cancellationToken: cancellationToken))
             return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.ReservationOverlap), StatusCodes.Status409Conflict);
 
-        if (await guestStayContextFacade.HasActiveStayByRoomId(command.RoomId, cancellationToken: cancellationToken))
+        if (await guestStayContextFacade.HasOverlappingActiveStay(command.RoomId, command.StartAt, command.EndAt, cancellationToken: cancellationToken))
             return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.ReservationOverlap), StatusCodes.Status409Conflict);
 
         var hours = Convert.ToDecimal(duration.TotalHours);
@@ -115,6 +118,9 @@ public class ReservationCommandService(
         if (!requestedRange.IsValid())
             return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.InvalidDateRange), StatusCodes.Status400BadRequest);
 
+        if (command.StartAt < DateTime.UtcNow.AddMinutes(-5))
+            return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.StartDateInPast), StatusCodes.Status400BadRequest);
+
         var duration = command.EndAt - command.StartAt;
         if (duration.Ticks % TimeSpan.FromHours(1).Ticks != 0)
             return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.InvalidDurationHours), StatusCodes.Status400BadRequest);
@@ -123,10 +129,16 @@ public class ReservationCommandService(
         if (room == null)
             return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.RoomNotFound), StatusCodes.Status404NotFound);
 
+        if (room.Status == "maintenance")
+            return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.RoomInMaintenance), StatusCodes.Status409Conflict);
+
         if (command.GuestsQuantity < 1 || command.GuestsQuantity > room.Capacity)
             return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.InvalidGuestsQuantity), StatusCodes.Status400BadRequest, room.Capacity);
 
         if (await repository.ExistsOverlappingReservationAsync(command.RoomId, command.StartAt, command.EndAt, command.Id, cancellationToken))
+            return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.ReservationOverlap), StatusCodes.Status409Conflict);
+
+        if (await guestStayContextFacade.HasOverlappingActiveStay(command.RoomId, command.StartAt, command.EndAt, cancellationToken: cancellationToken))
             return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.ReservationOverlap), StatusCodes.Status409Conflict);
 
         var hours = Convert.ToDecimal(duration.TotalHours);

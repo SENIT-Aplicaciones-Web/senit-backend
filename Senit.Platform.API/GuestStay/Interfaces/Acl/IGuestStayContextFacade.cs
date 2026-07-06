@@ -19,6 +19,16 @@ public interface IGuestStayContextFacade
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    ///     Checks whether a room has an active stay that overlaps a requested period.
+    /// </summary>
+    Task<bool> HasOverlappingActiveStay(
+        string roomId,
+        DateTime startAt,
+        DateTime endAt,
+        string? excludedStayId = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     ///     Marks a guest stay as finished and paid, returning the data needed by checkout orchestration.
     /// </summary>
     Task<GuestStayCheckoutSnapshot?> CompleteCheckout(

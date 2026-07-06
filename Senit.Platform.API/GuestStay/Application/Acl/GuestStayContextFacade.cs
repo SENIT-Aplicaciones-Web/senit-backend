@@ -23,6 +23,19 @@ public class GuestStayContextFacade(
     }
 
     /// <summary>
+    ///     Checks whether a room has an active guest stay that overlaps the requested period.
+    /// </summary>
+    public async Task<bool> HasOverlappingActiveStay(
+        string roomId,
+        DateTime startAt,
+        DateTime endAt,
+        string? excludedStayId = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await guestStayRepository.ExistsOverlappingActiveStayAsync(roomId, startAt, endAt, excludedStayId, cancellationToken);
+    }
+
+    /// <summary>
     ///     Completes checkout for a guest stay and returns the room information required by other contexts.
     /// </summary>
     public async Task<GuestStayCheckoutSnapshot?> CompleteCheckout(

@@ -138,4 +138,7 @@
   <data name="Unit price must be greater than zero" xml:space="preserve">
     <value>El precio unitario debe ser mayor que cero</value>
   </data>
+  <data name="StartDateInPast" xml:space="preserve">
+    <value>La fecha de inicio de la estadía no puede ser anterior al momento actual.</value>
+  </data>
 </root>

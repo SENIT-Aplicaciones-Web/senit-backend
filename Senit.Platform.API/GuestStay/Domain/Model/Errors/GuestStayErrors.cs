@@ -11,6 +11,7 @@ public enum GuestStayErrors
     InvalidAmount,
     InvalidDateRange,
     InvalidDurationHours,
+    StartDateInPast,
     RoomNotAvailable,
     RoomHasActiveStay,
     ReservationOverlap

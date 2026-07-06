@@ -129,4 +129,7 @@
   <data name="Status must be confirmed cancelled or completed" xml:space="preserve">
     <value>El estado debe ser confirmed cancelled o completed</value>
   </data>
+  <data name="StartDateInPast" xml:space="preserve">
+    <value>La fecha de inicio de la reserva no puede ser anterior al momento actual.</value>
+  </data>
 </root>

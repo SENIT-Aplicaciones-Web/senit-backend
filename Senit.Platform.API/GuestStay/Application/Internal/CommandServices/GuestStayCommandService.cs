@@ -24,6 +24,9 @@ public class GuestStayCommandService(
         if (command.StartAt >= command.ExpectedEndAt)
             return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.InvalidDateRange), StatusCodes.Status400BadRequest);
 
+        if (command.StartAt < DateTime.UtcNow.AddMinutes(-5))
+            return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.StartDateInPast), StatusCodes.Status400BadRequest);
+
         var duration = command.ExpectedEndAt - command.StartAt;
         if (duration.Ticks % TimeSpan.FromHours(1).Ticks != 0)
             return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.InvalidDurationHours), StatusCodes.Status400BadRequest);
@@ -73,9 +76,15 @@ public class GuestStayCommandService(
         if (command.StartAt >= command.ExpectedEndAt)
             return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.InvalidDateRange), StatusCodes.Status400BadRequest);
 
+        if (command.StartAt < DateTime.UtcNow.AddMinutes(-5))
+            return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.StartDateInPast), StatusCodes.Status400BadRequest);
+
         var duration = command.ExpectedEndAt - command.StartAt;
         if (duration.Ticks % TimeSpan.FromHours(1).Ticks != 0)
             return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.InvalidDurationHours), StatusCodes.Status400BadRequest);
+
+        if (await reservationContextFacade.HasOverlappingReservation(command.RoomId, command.StartAt, command.ExpectedEndAt, cancellationToken: cancellationToken))
+            return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.ReservationOverlap), StatusCodes.Status409Conflict);
 
         entity.Update(
             command.HotelId,

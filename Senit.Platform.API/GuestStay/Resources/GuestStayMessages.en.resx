@@ -138,4 +138,7 @@
   <data name="Unit price must be greater than zero" xml:space="preserve">
     <value>Unit price must be greater than zero</value>
   </data>
+  <data name="StartDateInPast" xml:space="preserve">
+    <value>The check in start date cannot be earlier than the current time.</value>
+  </data>
 </root>
