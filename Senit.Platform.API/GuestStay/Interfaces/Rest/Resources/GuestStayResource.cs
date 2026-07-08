@@ -11,6 +11,7 @@ public record GuestStayResource(
     [property: OpenApiExample("room_standard_101")] string RoomId,
     [property: OpenApiExample("guest_juan_perez")] string GuestId,
     [property: OpenApiExample("Juan Perez")] string GuestName,
+    [property: OpenApiExample("[{\"fullName\":\"Ana Torres\",\"dni\":\"87654321\"}]")] string? AdditionalGuestsJson,
     [property: OpenApiExample("2026-07-06T14:00:00Z")] DateTime StartAt,
     [property: OpenApiExample("2026-07-06T18:00:00Z")] DateTime ExpectedEndAt,
     [property: OpenApiExample(null)] DateTime? ActualEndAt,

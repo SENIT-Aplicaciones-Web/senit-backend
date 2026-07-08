@@ -8,5 +8,10 @@ public enum SubscriptionPaymentErrors
     SubscriptionNotFound,
     SubscriptionPaymentNotFound,
     InvalidAmount,
-    InvalidPlan
+    InvalidPlan,
+    InvalidCheckoutRegistration,
+    CheckoutSessionCouldNotBeCreated,
+    CheckoutSessionNotFound,
+    CheckoutHotelCouldNotBeActivated,
+    CheckoutUserCouldNotBeActivated
 }

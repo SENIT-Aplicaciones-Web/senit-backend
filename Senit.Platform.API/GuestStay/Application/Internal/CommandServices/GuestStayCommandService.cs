@@ -17,7 +17,8 @@ public class GuestStayCommandService(
     IGuestStayRepository repository,
     IUnitOfWork unitOfWork,
     IRoomContextFacade roomContextFacade,
-    IReservationContextFacade reservationContextFacade) : IGuestStayCommandService
+    IReservationContextFacade reservationContextFacade,
+    IGuestRepository guestRepository) : IGuestStayCommandService
 {
     public async Task<ApplicationResult<GuestStayRecord>> Handle(CreateGuestStayCommand command, CancellationToken cancellationToken = default)
     {
@@ -41,6 +42,13 @@ public class GuestStayCommandService(
         if (await repository.ExistsActiveStayByRoomIdAsync(command.RoomId, cancellationToken: cancellationToken))
             return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.RoomHasActiveStay), StatusCodes.Status409Conflict);
 
+        var guest = await guestRepository.FindByIdAsync(command.GuestId, cancellationToken);
+        if (guest == null)
+            return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.GuestNotFound), StatusCodes.Status404NotFound);
+
+        if (await repository.ExistsActiveStayByGuestDniAsync(guest.Dni, cancellationToken: cancellationToken))
+            return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.GuestHasActiveStay), StatusCodes.Status409Conflict);
+
         if (await reservationContextFacade.HasOverlappingReservation(command.RoomId, command.StartAt, command.ExpectedEndAt, cancellationToken: cancellationToken))
             return ApplicationResult<GuestStayRecord>.Failure(nameof(GuestStayErrors.ReservationOverlap), StatusCodes.Status409Conflict);
         var entity = new GuestStayRecord(
@@ -49,6 +57,7 @@ public class GuestStayCommandService(
             command.RoomId,
             command.GuestId,
             command.GuestName,
+            command.AdditionalGuestsJson,
             command.StartAt,
             command.ExpectedEndAt,
             command.ActualEndAt,
@@ -91,6 +100,7 @@ public class GuestStayCommandService(
             command.RoomId,
             command.GuestId,
             command.GuestName,
+            command.AdditionalGuestsJson,
             command.StartAt,
             command.ExpectedEndAt,
             command.ActualEndAt,

@@ -141,4 +141,10 @@
   <data name="StartDateInPast" xml:space="preserve">
     <value>La fecha de inicio de la estadía no puede ser anterior al momento actual.</value>
   </data>
+  <data name="GuestHasActiveStay" xml:space="preserve">
+    <value>El huésped ya tiene una estadía activa.</value>
+  </data>
+  <data name="Additional guests data must not exceed 4000 characters" xml:space="preserve">
+    <value>Los datos de huéspedes adicionales no deben exceder 4000 caracteres</value>
+  </data>
 </root>

@@ -23,8 +23,49 @@ public class UserCommandService(
         if (!await frontDeskContextFacade.HotelExists(command.HotelId, cancellationToken))
             return ApplicationResult<User>.Failure(nameof(IamErrors.HotelNotFound), StatusCodes.Status404NotFound);
 
-        if (await repository.ExistsByEmailAsync(command.Email, cancellationToken: cancellationToken))
-            return ApplicationResult<User>.Failure(nameof(IamErrors.DuplicateEmail), StatusCodes.Status409Conflict);
+        var existingUser = await repository.FindByEmailAsync(command.Email, cancellationToken);
+        if (existingUser != null)
+        {
+            var hasActiveAssignment = await hotelStaffMemberRepository.HasActiveAssignmentAsync(existingUser.Id, cancellationToken);
+            if (existingUser.Status == "active" && hasActiveAssignment)
+                return ApplicationResult<User>.Failure(nameof(IamErrors.UserAlreadyActiveInHotel), StatusCodes.Status409Conflict);
+
+            existingUser.Update(
+                command.HotelId,
+                command.FullName,
+                command.Username,
+                command.Email,
+                command.Password,
+                command.Role,
+                command.Status);
+
+            var existingAssignment = await hotelStaffMemberRepository.FindByHotelIdAndUserIdAsync(
+                command.HotelId,
+                existingUser.Id,
+                cancellationToken);
+
+            if (existingAssignment == null)
+            {
+                existingAssignment = new HotelStaffMember(
+                    Guid.NewGuid().ToString(),
+                    command.HotelId,
+                    existingUser.Id,
+                    command.Role,
+                    command.Status);
+
+                await hotelStaffMemberRepository.AddAsync(existingAssignment, cancellationToken);
+            }
+            else
+            {
+                existingAssignment.Update(command.Role, command.Status);
+                hotelStaffMemberRepository.Update(existingAssignment);
+            }
+
+            repository.Update(existingUser);
+            await unitOfWork.CompleteAsync(cancellationToken);
+
+            return ApplicationResult<User>.Created(existingUser);
+        }
 
         var entity = new User(
             Guid.NewGuid().ToString(),

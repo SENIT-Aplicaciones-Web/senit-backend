@@ -69,4 +69,19 @@
   <data name="Subscription identifier must not exceed 64 characters" xml:space="preserve">
     <value>Subscription identifier must not exceed 64 characters</value>
   </data>
+  <data name="InvalidCheckoutRegistration" xml:space="preserve">
+    <value>The checkout registration data is invalid.</value>
+  </data>
+  <data name="CheckoutSessionCouldNotBeCreated" xml:space="preserve">
+    <value>The simulated checkout session could not be created.</value>
+  </data>
+  <data name="CheckoutSessionNotFound" xml:space="preserve">
+    <value>The simulated checkout session was not found.</value>
+  </data>
+  <data name="CheckoutHotelCouldNotBeActivated" xml:space="preserve">
+    <value>The hotel could not be activated after checkout.</value>
+  </data>
+  <data name="CheckoutUserCouldNotBeActivated" xml:space="preserve">
+    <value>The administrator user could not be activated after checkout.</value>
+  </data>
 </root>

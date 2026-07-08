@@ -11,6 +11,7 @@ public class GuestStayRecord : AuditableEntity
     public string RoomId { get; private set; } = string.Empty;
     public string GuestId { get; private set; } = string.Empty;
     public string GuestName { get; private set; } = string.Empty;
+    public string? AdditionalGuestsJson { get; private set; }
     public DateTime StartAt { get; private set; }
     public DateTime ExpectedEndAt { get; private set; }
     public DateTime? ActualEndAt { get; private set; }
@@ -31,6 +32,7 @@ public class GuestStayRecord : AuditableEntity
         string roomId,
         string guestId,
         string guestName,
+        string? additionalGuestsJson,
         DateTime startAt,
         DateTime expectedEndAt,
         DateTime? actualEndAt,
@@ -46,6 +48,7 @@ public class GuestStayRecord : AuditableEntity
         RoomId = roomId;
         GuestId = guestId;
         GuestName = guestName;
+        AdditionalGuestsJson = additionalGuestsJson;
         StartAt = startAt;
         ExpectedEndAt = expectedEndAt;
         ActualEndAt = actualEndAt;
@@ -62,6 +65,7 @@ public class GuestStayRecord : AuditableEntity
         string roomId,
         string guestId,
         string guestName,
+        string? additionalGuestsJson,
         DateTime startAt,
         DateTime expectedEndAt,
         DateTime? actualEndAt,
@@ -76,6 +80,7 @@ public class GuestStayRecord : AuditableEntity
         RoomId = roomId;
         GuestId = guestId;
         GuestName = guestName;
+        AdditionalGuestsJson = additionalGuestsJson;
         StartAt = startAt;
         ExpectedEndAt = expectedEndAt;
         ActualEndAt = actualEndAt;

@@ -32,4 +32,19 @@ public interface IIamContextFacade
     ///     Removes a user assignment from a hotel without exposing IAM command services.
     /// </summary>
     Task<bool> RemoveUserFromHotel(string hotelId, string userId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Checks whether an email can start a hotel administrator registration.
+    /// </summary>
+    Task<bool> CanRegisterHotelAdministrator(
+        string email,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Activates the administrator assigned to a hotel without exposing IAM domain objects.
+    /// </summary>
+    Task<bool> ActivateHotelAdministrator(
+        string hotelId,
+        CancellationToken cancellationToken = default);
+
 }

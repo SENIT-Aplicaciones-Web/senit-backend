@@ -20,6 +20,7 @@ public static class CreateGuestStayCommandFromResourceAssembler
             resource.RoomId,
             resource.GuestId,
             resource.GuestName,
+            resource.AdditionalGuestsJson,
             resource.StartAt,
             resource.ExpectedEndAt,
             resource.ActualEndAt,

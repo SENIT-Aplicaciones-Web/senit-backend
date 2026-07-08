@@ -28,6 +28,10 @@ public class CreateGuestStayResource
     [OpenApiExample("Juan Perez")]
     public string GuestName { get; init; } = string.Empty;
 
+    [StringLength(4000, ErrorMessage = "Additional guests data must not exceed 4000 characters")]
+    [OpenApiExample("[{\"fullName\":\"Ana Torres\",\"dni\":\"87654321\"}]")]
+    public string? AdditionalGuestsJson { get; init; }
+
     [OpenApiExample("2026-07-06T14:00:00Z")]
     public DateTime StartAt { get; init; }
 

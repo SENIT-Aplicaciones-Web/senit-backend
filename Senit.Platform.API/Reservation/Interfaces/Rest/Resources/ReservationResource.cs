@@ -14,6 +14,7 @@ public record ReservationResource(
     [property: OpenApiExample("987654321")] string Phone,
     [property: OpenApiExample("juan.perez@mail.com")] string? Email,
     [property: OpenApiExample(2)] int GuestsQuantity,
+    [property: OpenApiExample("[{\"fullName\":\"Ana Torres\",\"dni\":\"87654321\"}]")] string? AdditionalGuestsJson,
     [property: OpenApiExample("2026-07-06T14:00:00Z")] DateTime StartAt,
     [property: OpenApiExample("2026-07-06T18:00:00Z")] DateTime EndAt,
     [property: OpenApiExample("active")] string Status,

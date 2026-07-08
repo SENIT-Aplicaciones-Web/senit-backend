@@ -28,6 +28,17 @@ public class GuestStayRepository(AppDbContext context) : BaseRepository<GuestSta
                 cancellationToken);
     }
 
+    public async Task<bool> ExistsActiveStayByGuestDniAsync(string dni, string? excludedId = null, CancellationToken cancellationToken = default)
+    {
+        return await (from stay in Context.Set<GuestStayRecord>()
+                join guest in Context.Set<Guest>() on stay.GuestId equals guest.Id
+                where guest.Dni == dni &&
+                      stay.Status == "active" &&
+                      (excludedId == null || stay.Id != excludedId)
+                select stay)
+            .AnyAsync(cancellationToken);
+    }
+
     public async Task<bool> ExistsOverlappingActiveStayAsync(string roomId, DateTime startAt, DateTime endAt, string? excludedId = null, CancellationToken cancellationToken = default)
     {
         return await Context.Set<GuestStayRecord>()

@@ -40,4 +40,30 @@ public class FrontDeskContextFacade(
         var hotel = await hotelQueryService.Handle(new GetHotelByIdQuery(hotelId), cancellationToken);
         return hotel is not null;
     }
+    /// <summary>
+    ///     Updates hotel plan and status through the FrontDesk bounded context.
+    /// </summary>
+    public async Task<bool> UpdateHotelPlanAndStatus(
+        string hotelId,
+        string plan,
+        string status,
+        CancellationToken cancellationToken = default)
+    {
+        var hotel = await hotelQueryService.Handle(new GetHotelByIdQuery(hotelId), cancellationToken);
+        if (hotel is null) return false;
+
+        var command = new UpdateHotelCommand(
+            hotel.Id,
+            hotel.Name,
+            hotel.Ruc,
+            hotel.Address,
+            hotel.Phone,
+            hotel.Email,
+            plan,
+            status);
+
+        var result = await hotelCommandService.Handle(command, cancellationToken);
+        return result.IsSuccess;
+    }
+
 }

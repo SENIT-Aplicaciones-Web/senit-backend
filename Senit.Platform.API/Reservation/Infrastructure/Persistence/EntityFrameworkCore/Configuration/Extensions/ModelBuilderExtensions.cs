@@ -27,6 +27,7 @@ public static class ModelBuilderExtensions
         builder.Entity<HotelReservation>().Property(entity => entity.Dni).IsRequired().HasMaxLength(8);
         builder.Entity<HotelReservation>().Property(entity => entity.Phone).IsRequired().HasMaxLength(9);
         builder.Entity<HotelReservation>().Property(entity => entity.Email).HasMaxLength(250);
+        builder.Entity<HotelReservation>().Property(entity => entity.AdditionalGuestsJson).HasColumnType("longtext");
         builder.Entity<HotelReservation>().Property(entity => entity.Status).IsRequired().HasMaxLength(50);
         builder.Entity<HotelReservation>().Property(entity => entity.Hours).HasPrecision(10, 2);
         builder.Entity<HotelReservation>().Property(entity => entity.ReservationAmount).HasPrecision(10, 2);

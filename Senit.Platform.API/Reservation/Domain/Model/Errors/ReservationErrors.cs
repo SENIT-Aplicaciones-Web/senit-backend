@@ -6,6 +6,7 @@ namespace Senit.Platform.API.Reservation.Domain.Model.Errors;
 public enum ReservationErrors
 {
     ReservationNotFound,
+    CannotCancelStartedReservation,
     RoomNotFound,
     RoomInMaintenance,
     InvalidGuestsQuantity,

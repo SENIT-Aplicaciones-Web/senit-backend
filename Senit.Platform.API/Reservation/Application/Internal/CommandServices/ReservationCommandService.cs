@@ -77,6 +77,7 @@ public class ReservationCommandService(
             command.Phone,
             command.Email,
             command.GuestsQuantity,
+            command.AdditionalGuestsJson,
             command.StartAt,
             command.EndAt,
             command.Status,
@@ -113,6 +114,36 @@ public class ReservationCommandService(
         var entity = await repository.FindByIdAsync(command.Id, cancellationToken);
         if (entity == null)
             return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.ReservationNotFound), StatusCodes.Status404NotFound);
+
+        if (command.Status.Equals("cancelled", StringComparison.OrdinalIgnoreCase))
+        {
+            if (DateTime.UtcNow >= entity.StartAt)
+                return ApplicationResult<HotelReservation>.Failure(nameof(ReservationErrors.CannotCancelStartedReservation), StatusCodes.Status409Conflict);
+
+            entity.Update(
+                entity.HotelId,
+                entity.RoomId,
+                entity.GuestName,
+                entity.Dni,
+                entity.Phone,
+                entity.Email,
+                entity.GuestsQuantity,
+                entity.AdditionalGuestsJson,
+                entity.StartAt,
+                entity.EndAt,
+                "cancelled",
+                entity.Hours,
+                entity.ReservationAmount,
+                entity.PrepaidAmount,
+                entity.PaymentMethod,
+                entity.PaymentStatus,
+                entity.PaidAt);
+
+            repository.Update(entity);
+            await unitOfWork.CompleteAsync(cancellationToken);
+
+            return ApplicationResult<HotelReservation>.Success(entity);
+        }
 
         var requestedRange = new ReservationDateRange(command.StartAt, command.EndAt);
         if (!requestedRange.IsValid())
@@ -152,6 +183,7 @@ public class ReservationCommandService(
             command.Phone,
             command.Email,
             command.GuestsQuantity,
+            command.AdditionalGuestsJson,
             command.StartAt,
             command.EndAt,
             command.Status,

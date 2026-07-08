@@ -11,6 +11,7 @@ public record CreateReservationCommand(
     string Phone,
     string? Email,
     int GuestsQuantity,
+    string? AdditionalGuestsJson,
     DateTime StartAt,
     DateTime EndAt,
     string Status,

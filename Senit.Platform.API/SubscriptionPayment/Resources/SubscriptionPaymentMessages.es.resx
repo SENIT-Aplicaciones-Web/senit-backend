@@ -69,4 +69,19 @@
   <data name="Subscription identifier must not exceed 64 characters" xml:space="preserve">
     <value>El identificador de la suscripción no debe exceder 64 caracteres</value>
   </data>
+  <data name="InvalidCheckoutRegistration" xml:space="preserve">
+    <value>Los datos del registro para checkout no son válidos.</value>
+  </data>
+  <data name="CheckoutSessionCouldNotBeCreated" xml:space="preserve">
+    <value>No se pudo crear la sesión de checkout simulado.</value>
+  </data>
+  <data name="CheckoutSessionNotFound" xml:space="preserve">
+    <value>No se encontró la sesión de checkout simulado.</value>
+  </data>
+  <data name="CheckoutHotelCouldNotBeActivated" xml:space="preserve">
+    <value>No se pudo activar el hotel después del checkout.</value>
+  </data>
+  <data name="CheckoutUserCouldNotBeActivated" xml:space="preserve">
+    <value>No se pudo activar el usuario administrador después del checkout.</value>
+  </data>
 </root>

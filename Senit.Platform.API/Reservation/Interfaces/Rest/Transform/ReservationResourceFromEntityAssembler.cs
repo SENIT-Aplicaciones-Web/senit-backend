@@ -24,6 +24,7 @@ public static class ReservationResourceFromEntityAssembler
             entity.Phone,
             entity.Email,
             entity.GuestsQuantity,
+            entity.AdditionalGuestsJson,
             entity.StartAt,
             entity.EndAt,
             entity.Status,
