@@ -4,9 +4,9 @@ using Senit.Platform.API.Shared.Infrastructure.OpenApi;
 namespace Senit.Platform.API.SubscriptionPayment.Interfaces.Rest.Resources;
 
 /// <summary>
-///     Resource used to create a simulated Stripe checkout session for a subscription.
+///     Resource used to create a Stripe hosted Checkout session for a subscription.
 /// </summary>
-public class CreateSimulatedCheckoutSessionResource
+public class CreateStripeCheckoutSessionResource
 {
     [Required(ErrorMessage = "Username is required")]
     [RegularExpression(@"^[A-Za-z0-9_]{3,100}$", ErrorMessage = "Username must use 3 to 100 letters numbers or underscores")]

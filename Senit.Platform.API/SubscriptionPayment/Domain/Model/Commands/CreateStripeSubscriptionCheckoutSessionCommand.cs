@@ -1,9 +1,9 @@
 namespace Senit.Platform.API.SubscriptionPayment.Domain.Model.Commands;
 
 /// <summary>
-///     Command used to start a simulated Stripe checkout for a hotel subscription.
+///     Command used to start a Stripe hosted Checkout session for a hotel subscription.
 /// </summary>
-public record CreateSimulatedSubscriptionCheckoutSessionCommand(
+public record CreateStripeSubscriptionCheckoutSessionCommand(
     string Username,
     string Email,
     string Password,

@@ -4,13 +4,13 @@ using Senit.Platform.API.SubscriptionPayment.Interfaces.Rest.Resources;
 namespace Senit.Platform.API.SubscriptionPayment.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Converts simulated checkout session results into REST resources.
+///     Converts Stripe Checkout session results into REST resources.
 /// </summary>
-public static class SimulatedCheckoutSessionResourceFromResultAssembler
+public static class StripeCheckoutSessionResourceFromResultAssembler
 {
-    public static SimulatedCheckoutSessionResource ToResourceFromResult(SimulatedCheckoutSessionResult result)
+    public static StripeCheckoutSessionResource ToResourceFromResult(StripeCheckoutSessionResult result)
     {
-        return new SimulatedCheckoutSessionResource(
+        return new StripeCheckoutSessionResource(
             result.Id,
             result.CheckoutUrl,
             result.SuccessUrl,
@@ -19,6 +19,7 @@ public static class SimulatedCheckoutSessionResourceFromResultAssembler
             result.Amount,
             result.Currency,
             result.Status,
+            result.PaymentStatus,
             result.CustomerEmail);
     }
 }

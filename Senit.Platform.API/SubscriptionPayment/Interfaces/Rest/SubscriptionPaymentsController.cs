@@ -25,7 +25,7 @@ namespace Senit.Platform.API.SubscriptionPayment.Interfaces.Rest;
 public class SubscriptionPaymentsController(
     ISubscriptionPaymentQueryService queryService,
     ISubscriptionPaymentCommandService commandService,
-    ISimulatedSubscriptionCheckoutCommandService checkoutCommandService,
+    IStripeSubscriptionCheckoutCommandService checkoutCommandService,
     IStringLocalizer<SubscriptionPaymentMessages> contextLocalizer,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
@@ -37,20 +37,20 @@ public class SubscriptionPaymentsController(
     // The current user interface does not open an individual subscription payment detail page.
 
 
-    [HttpPost("simulated-checkout/sessions")]
+    [HttpPost("stripe-checkout/sessions")]
     [SwaggerOperation(
-        Summary = "Create a simulated Stripe checkout session",
-        Description = "Create a local simulated Stripe checkout session for a new hotel subscription registration",
-        OperationId = "CreateSimulatedSubscriptionCheckoutSession")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The simulated checkout session was created", typeof(SimulatedCheckoutSessionResource))]
+        Summary = "Create a Stripe Checkout session",
+        Description = "Create a Stripe hosted Checkout session for a new hotel subscription registration",
+        OperationId = "CreateStripeSubscriptionCheckoutSession")]
+    [SwaggerResponse(StatusCodes.Status201Created, "The Stripe Checkout session was created", typeof(StripeCheckoutSessionResource))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "The checkout registration data is invalid")]
     [SwaggerResponse(StatusCodes.Status409Conflict, "The email already has an active hotel assignment")]
     [AllowAnonymous]
-    public async Task<IActionResult> CreateSimulatedCheckoutSession(
-        [FromBody] CreateSimulatedCheckoutSessionResource resource,
+    public async Task<IActionResult> CreateStripeCheckoutSession(
+        [FromBody] CreateStripeCheckoutSessionResource resource,
         CancellationToken cancellationToken)
     {
-        var command = CreateSimulatedCheckoutSessionCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var command = CreateStripeCheckoutSessionCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await checkoutCommandService.Handle(command, cancellationToken);
 
         return ActionResultAssembler.ToActionResultFromCommandResult(
@@ -60,18 +60,18 @@ public class SubscriptionPaymentsController(
             _problemDetailsFactory,
             session => StatusCode(
                 StatusCodes.Status201Created,
-                SimulatedCheckoutSessionResourceFromResultAssembler.ToResourceFromResult(session)));
+                StripeCheckoutSessionResourceFromResultAssembler.ToResourceFromResult(session)));
     }
 
-    [HttpGet("simulated-checkout/sessions/{sessionId}")]
+    [HttpGet("stripe-checkout/sessions/{sessionId}")]
     [SwaggerOperation(
-        Summary = "Get a simulated Stripe checkout session",
-        Description = "Get the current status of a simulated Stripe checkout session",
-        OperationId = "GetSimulatedSubscriptionCheckoutSession")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The simulated checkout session was found", typeof(SimulatedCheckoutSessionResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The simulated checkout session was not found")]
+        Summary = "Get a Stripe Checkout session",
+        Description = "Get the current status of a Stripe Checkout session and activate the hotel registration when Stripe confirms payment",
+        OperationId = "GetStripeSubscriptionCheckoutSession")]
+    [SwaggerResponse(StatusCodes.Status200OK, "The Stripe Checkout session was found", typeof(StripeCheckoutSessionResource))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "The Stripe Checkout session was not found")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetSimulatedCheckoutSession(
+    public async Task<IActionResult> GetStripeCheckoutSession(
         [FromRoute] string sessionId,
         CancellationToken cancellationToken)
     {
@@ -82,30 +82,7 @@ public class SubscriptionPaymentsController(
             result,
             _contextLocalizer,
             _problemDetailsFactory,
-            session => Ok(SimulatedCheckoutSessionResourceFromResultAssembler.ToResourceFromResult(session)));
-    }
-
-    [HttpPost("simulated-checkout/sessions/{sessionId}/complete")]
-    [SwaggerOperation(
-        Summary = "Complete a simulated Stripe checkout session",
-        Description = "Complete a simulated subscription checkout and activate the hotel administrator account",
-        OperationId = "CompleteSimulatedSubscriptionCheckoutSession")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The simulated checkout session was completed", typeof(SimulatedCheckoutSessionResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The simulated checkout session was not found")]
-    [AllowAnonymous]
-    public async Task<IActionResult> CompleteSimulatedCheckoutSession(
-        [FromRoute] string sessionId,
-        CancellationToken cancellationToken)
-    {
-        var command = new CompleteSimulatedSubscriptionCheckoutSessionCommand(sessionId);
-        var result = await checkoutCommandService.Handle(command, cancellationToken);
-
-        return ActionResultAssembler.ToActionResultFromCommandResult(
-            this,
-            result,
-            _contextLocalizer,
-            _problemDetailsFactory,
-            session => Ok(SimulatedCheckoutSessionResourceFromResultAssembler.ToResourceFromResult(session)));
+            session => Ok(StripeCheckoutSessionResourceFromResultAssembler.ToResourceFromResult(session)));
     }
 
     [HttpGet]

@@ -27,6 +27,7 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.2.0" />
         <PackageReference Include="Cortex.Mediator" Version="3.1.2" />
+        <PackageReference Include="Stripe.net" Version="52.1.0" />
     </ItemGroup>
 
     <ItemGroup>

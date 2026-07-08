@@ -13,5 +13,6 @@ public enum SubscriptionPaymentErrors
     CheckoutSessionCouldNotBeCreated,
     CheckoutSessionNotFound,
     CheckoutHotelCouldNotBeActivated,
-    CheckoutUserCouldNotBeActivated
+    CheckoutUserCouldNotBeActivated,
+    CheckoutRegistrationExpired
 }

@@ -1,9 +1,9 @@
-namespace Senit.Platform.API.SubscriptionPayment.Interfaces.Rest.Resources;
+namespace Senit.Platform.API.SubscriptionPayment.Application.External.PaymentGateway;
 
 /// <summary>
-///     Resource returned by the simulated Stripe checkout flow.
+///     Result returned by Stripe hosted Checkout operations.
 /// </summary>
-public record SimulatedCheckoutSessionResource(
+public record StripeCheckoutSessionResult(
     string Id,
     string CheckoutUrl,
     string SuccessUrl,
@@ -12,4 +12,5 @@ public record SimulatedCheckoutSessionResource(
     decimal Amount,
     string Currency,
     string Status,
+    string PaymentStatus,
     string CustomerEmail);

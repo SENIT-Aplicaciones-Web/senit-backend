@@ -73,15 +73,18 @@
     <value>Los datos del registro para checkout no son válidos.</value>
   </data>
   <data name="CheckoutSessionCouldNotBeCreated" xml:space="preserve">
-    <value>No se pudo crear la sesión de checkout simulado.</value>
+    <value>No se pudo crear la sesión de Stripe Checkout.</value>
   </data>
   <data name="CheckoutSessionNotFound" xml:space="preserve">
-    <value>No se encontró la sesión de checkout simulado.</value>
+    <value>No se encontró la sesión de Stripe Checkout.</value>
   </data>
   <data name="CheckoutHotelCouldNotBeActivated" xml:space="preserve">
     <value>No se pudo activar el hotel después del checkout.</value>
   </data>
   <data name="CheckoutUserCouldNotBeActivated" xml:space="preserve">
     <value>No se pudo activar el usuario administrador después del checkout.</value>
+  </data>
+  <data name="CheckoutRegistrationExpired" xml:space="preserve">
+    <value>El registro del checkout expiró antes de confirmar el pago.</value>
   </data>
 </root>

@@ -1,5 +1,5 @@
-using Senit.Platform.API.Iam.Domain.Model.ValueObjects;
 using Senit.Platform.API.FrontDesk.Interfaces.Acl;
+using Senit.Platform.API.Iam.Domain.Model.ValueObjects;
 using Senit.Platform.API.Iam.Interfaces.Acl;
 using Senit.Platform.API.Shared.Application.Model;
 using Senit.Platform.API.Shared.Domain.Repositories;
@@ -14,19 +14,19 @@ using Senit.Platform.API.SubscriptionPayment.Domain.Repositories;
 namespace Senit.Platform.API.SubscriptionPayment.Application.Internal.CommandServices;
 
 /// <summary>
-///     Coordinates the simulated Stripe checkout flow inside the SubscriptionPayment bounded context.
+///     Coordinates Stripe hosted Checkout inside the SubscriptionPayment bounded context.
 /// </summary>
-public class SimulatedSubscriptionCheckoutCommandService(
+public class StripeSubscriptionCheckoutCommandService(
     ISubscriptionRepository subscriptionRepository,
     ISubscriptionPaymentRepository subscriptionPaymentRepository,
     IFrontDeskContextFacade frontDeskContextFacade,
     IIamContextFacade iamContextFacade,
-    ISimulatedSubscriptionPaymentGateway paymentGateway,
-    ISimulatedCheckoutSessionStore checkoutSessionStore,
-    IUnitOfWork unitOfWork) : ISimulatedSubscriptionCheckoutCommandService
+    IStripeSubscriptionPaymentGateway paymentGateway,
+    IStripeCheckoutSessionStore checkoutSessionStore,
+    IUnitOfWork unitOfWork) : IStripeSubscriptionCheckoutCommandService
 {
-    public async Task<ApplicationResult<SimulatedCheckoutSessionResult>> Handle(
-        CreateSimulatedSubscriptionCheckoutSessionCommand command,
+    public async Task<ApplicationResult<StripeCheckoutSessionResult>> Handle(
+        CreateStripeSubscriptionCheckoutSessionCommand command,
         CancellationToken cancellationToken = default)
     {
         var normalizedEmail = EmailAddress.Normalize(command.Email);
@@ -36,49 +36,90 @@ public class SimulatedSubscriptionCheckoutCommandService(
 
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(normalizedEmail) ||
             string.IsNullOrWhiteSpace(command.Password))
-            return ApplicationResult<SimulatedCheckoutSessionResult>.Failure(
+            return ApplicationResult<StripeCheckoutSessionResult>.Failure(
                 nameof(SubscriptionPaymentErrors.InvalidCheckoutRegistration),
                 StatusCodes.Status400BadRequest);
 
         if (!SubscriptionPlanCatalog.IsSupported(plan))
-            return ApplicationResult<SimulatedCheckoutSessionResult>.Failure(
+            return ApplicationResult<StripeCheckoutSessionResult>.Failure(
                 nameof(SubscriptionPaymentErrors.InvalidPlan),
                 StatusCodes.Status400BadRequest);
 
         if (!await iamContextFacade.CanRegisterHotelAdministrator(normalizedEmail, cancellationToken))
-            return ApplicationResult<SimulatedCheckoutSessionResult>.Failure(
+            return ApplicationResult<StripeCheckoutSessionResult>.Failure(
                 nameof(SubscriptionPaymentErrors.CheckoutSessionCouldNotBeCreated),
                 StatusCodes.Status409Conflict);
 
-        var sessionId = $"cs_test_{Guid.NewGuid():N}";
-        var session = new SimulatedCheckoutRegistrationSession(
-            sessionId,
+        var result = await paymentGateway.CreateSubscriptionCheckoutSessionAsync(
+            plan,
+            amount,
+            normalizedEmail,
+            cancellationToken);
+
+        if (result is null || string.IsNullOrWhiteSpace(result.Id) || string.IsNullOrWhiteSpace(result.CheckoutUrl))
+            return ApplicationResult<StripeCheckoutSessionResult>.Failure(
+                nameof(SubscriptionPaymentErrors.CheckoutSessionCouldNotBeCreated),
+                StatusCodes.Status400BadRequest);
+
+        checkoutSessionStore.Save(new StripeCheckoutRegistrationSession(
+            result.Id,
             username,
             normalizedEmail,
             command.Password,
             plan,
-            amount);
+            amount));
 
-        checkoutSessionStore.Save(session);
-
-        return ApplicationResult<SimulatedCheckoutSessionResult>.Created(
-            BuildResult(session));
+        return ApplicationResult<StripeCheckoutSessionResult>.Created(result);
     }
 
-    public async Task<ApplicationResult<SimulatedCheckoutSessionResult>> Handle(
-        CompleteSimulatedSubscriptionCheckoutSessionCommand command,
+    public async Task<ApplicationResult<StripeCheckoutSessionResult>> GetSession(
+        string sessionId,
         CancellationToken cancellationToken = default)
     {
-        if (!checkoutSessionStore.TryGet(command.SessionId, out var session))
-            return ApplicationResult<SimulatedCheckoutSessionResult>.Failure(
+        var stripeSession = await paymentGateway.RetrieveCheckoutSessionAsync(sessionId, cancellationToken);
+
+        if (stripeSession is null)
+            return ApplicationResult<StripeCheckoutSessionResult>.Failure(
                 nameof(SubscriptionPaymentErrors.CheckoutSessionNotFound),
                 StatusCodes.Status404NotFound);
 
-        if (session.Status == "completed")
-            return ApplicationResult<SimulatedCheckoutSessionResult>.Success(BuildResult(session));
+        if (!checkoutSessionStore.TryGet(sessionId, out var registrationSession))
+        {
+            return stripeSession.Status == "completed"
+                ? ApplicationResult<StripeCheckoutSessionResult>.Failure(
+                    nameof(SubscriptionPaymentErrors.CheckoutRegistrationExpired),
+                    StatusCodes.Status409Conflict)
+                : ApplicationResult<StripeCheckoutSessionResult>.Success(stripeSession);
+        }
 
+        if (registrationSession.Status == "completed")
+            return ApplicationResult<StripeCheckoutSessionResult>.Success(stripeSession with
+            {
+                Status = "completed",
+                PaymentStatus = "paid"
+            });
+
+        if (stripeSession.Status == "completed" && stripeSession.PaymentStatus == "paid")
+        {
+            var activationResult = await ActivateRegistration(registrationSession, cancellationToken);
+            if (!activationResult.IsSuccess) return activationResult;
+
+            return ApplicationResult<StripeCheckoutSessionResult>.Success(stripeSession with
+            {
+                Status = "completed",
+                PaymentStatus = "paid"
+            });
+        }
+
+        return ApplicationResult<StripeCheckoutSessionResult>.Success(stripeSession);
+    }
+
+    private async Task<ApplicationResult<StripeCheckoutSessionResult>> ActivateRegistration(
+        StripeCheckoutRegistrationSession session,
+        CancellationToken cancellationToken)
+    {
         if (!await iamContextFacade.CanRegisterHotelAdministrator(session.Email, cancellationToken))
-            return ApplicationResult<SimulatedCheckoutSessionResult>.Failure(
+            return ApplicationResult<StripeCheckoutSessionResult>.Failure(
                 nameof(SubscriptionPaymentErrors.CheckoutSessionCouldNotBeCreated),
                 StatusCodes.Status409Conflict);
 
@@ -97,7 +138,7 @@ public class SimulatedSubscriptionCheckoutCommandService(
             cancellationToken);
 
         if (string.IsNullOrWhiteSpace(hotelId))
-            return ApplicationResult<SimulatedCheckoutSessionResult>.Failure(
+            return ApplicationResult<StripeCheckoutSessionResult>.Failure(
                 nameof(SubscriptionPaymentErrors.CheckoutHotelCouldNotBeActivated),
                 StatusCodes.Status400BadRequest);
 
@@ -112,7 +153,7 @@ public class SimulatedSubscriptionCheckoutCommandService(
             cancellationToken);
 
         if (string.IsNullOrWhiteSpace(userId))
-            return ApplicationResult<SimulatedCheckoutSessionResult>.Failure(
+            return ApplicationResult<StripeCheckoutSessionResult>.Failure(
                 nameof(SubscriptionPaymentErrors.CheckoutUserCouldNotBeActivated),
                 StatusCodes.Status400BadRequest);
 
@@ -133,7 +174,7 @@ public class SimulatedSubscriptionCheckoutCommandService(
             hotelId,
             plan,
             amount,
-            "simulated-stripe",
+            "stripe-test",
             "completed",
             paidAt);
 
@@ -142,31 +183,16 @@ public class SimulatedSubscriptionCheckoutCommandService(
 
         session.MarkCompleted(hotelId, subscription.Id, paidAt);
 
-        return ApplicationResult<SimulatedCheckoutSessionResult>.Success(BuildResult(session));
-    }
-
-    public Task<ApplicationResult<SimulatedCheckoutSessionResult>> GetSession(
-        string sessionId,
-        CancellationToken cancellationToken = default)
-    {
-        if (!checkoutSessionStore.TryGet(sessionId, out var session))
-            return Task.FromResult(ApplicationResult<SimulatedCheckoutSessionResult>.Failure(
-                nameof(SubscriptionPaymentErrors.CheckoutSessionNotFound),
-                StatusCodes.Status404NotFound));
-
-        return Task.FromResult(ApplicationResult<SimulatedCheckoutSessionResult>.Success(BuildResult(session)));
-    }
-
-    private SimulatedCheckoutSessionResult BuildResult(SimulatedCheckoutRegistrationSession session)
-    {
-        return paymentGateway.CreateSession(
+        return ApplicationResult<StripeCheckoutSessionResult>.Success(new StripeCheckoutSessionResult(
             session.Id,
-            session.Plan,
-            session.Amount,
-            session.Email) with
-        {
-            Status = session.Status,
-            SuccessUrl = paymentGateway.BuildSuccessUrl(session.Id)
-        };
+            string.Empty,
+            string.Empty,
+            string.Empty,
+            plan,
+            amount,
+            "PEN",
+            "completed",
+            "paid",
+            session.Email));
     }
 }

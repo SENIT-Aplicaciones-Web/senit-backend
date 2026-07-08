@@ -1,9 +1,9 @@
 namespace Senit.Platform.API.SubscriptionPayment.Application.External.PaymentGateway;
 
 /// <summary>
-///     Temporary simulated checkout registration data kept outside the database until payment confirmation.
+///     Temporary registration data kept outside the database until Stripe Checkout is completed.
 /// </summary>
-public class SimulatedCheckoutRegistrationSession
+public class StripeCheckoutRegistrationSession
 {
     public string Id { get; }
     public string Username { get; }
@@ -17,7 +17,7 @@ public class SimulatedCheckoutRegistrationSession
     public string? HotelId { get; private set; }
     public string? SubscriptionId { get; private set; }
 
-    public SimulatedCheckoutRegistrationSession(
+    public StripeCheckoutRegistrationSession(
         string id,
         string username,
         string email,

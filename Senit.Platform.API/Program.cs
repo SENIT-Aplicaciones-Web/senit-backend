@@ -83,7 +83,7 @@ using Senit.Platform.API.SubscriptionPayment.Domain.Repositories;
 using Senit.Platform.API.SubscriptionPayment.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using Senit.Platform.API.SubscriptionPayment.Resources;
 using Senit.Platform.API.SubscriptionPayment.Application.External.PaymentGateway;
-using Senit.Platform.API.SubscriptionPayment.Infrastructure.PaymentGateway.Simulated;
+using Senit.Platform.API.SubscriptionPayment.Infrastructure.PaymentGateway.Stripe;
 using Senit.Platform.API.Housekeeping.Interfaces.Acl;
 using Senit.Platform.API.Housekeeping.Application.Acl;
 using Senit.Platform.API.GuestStay.Interfaces.Acl;
@@ -165,7 +165,7 @@ builder.Services.AddSingleton<IStringLocalizer<GuestStayMessages>, StringLocaliz
 builder.Services.AddSingleton<IStringLocalizer<PaymentMessages>, StringLocalizer<PaymentMessages>>();
 builder.Services.AddSingleton<IStringLocalizer<HousekeepingMessages>, StringLocalizer<HousekeepingMessages>>();
 builder.Services.AddSingleton<IStringLocalizer<SubscriptionPaymentMessages>, StringLocalizer<SubscriptionPaymentMessages>>();
-builder.Services.Configure<SimulatedStripeOptions>(builder.Configuration.GetSection("SimulatedStripe"));
+builder.Services.Configure<StripeCheckoutOptions>(builder.Configuration.GetSection("Stripe"));
 
 builder.Services.AddSingleton<ProblemDetailsFactory>();
 
@@ -245,9 +245,9 @@ builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>(
 builder.Services.AddScoped<ISubscriptionPaymentRepository, SubscriptionPaymentRepository>();
 builder.Services.AddScoped<ISubscriptionPaymentCommandService, SubscriptionPaymentCommandService>();
 builder.Services.AddScoped<ISubscriptionPaymentQueryService, SubscriptionPaymentQueryService>();
-builder.Services.AddScoped<ISimulatedSubscriptionCheckoutCommandService, SimulatedSubscriptionCheckoutCommandService>();
-builder.Services.AddScoped<ISimulatedSubscriptionPaymentGateway, SimulatedStripeSubscriptionPaymentGateway>();
-builder.Services.AddSingleton<ISimulatedCheckoutSessionStore, InMemorySimulatedCheckoutSessionStore>();
+builder.Services.AddScoped<IStripeSubscriptionCheckoutCommandService, StripeSubscriptionCheckoutCommandService>();
+builder.Services.AddScoped<IStripeSubscriptionPaymentGateway, StripeSubscriptionPaymentGateway>();
+builder.Services.AddSingleton<IStripeCheckoutSessionStore, InMemoryStripeCheckoutSessionStore>();
 builder.Services.AddScoped<ISubscriptionPaymentContextFacade, SubscriptionPaymentContextFacade>();
 builder.Services.AddScoped<IAuthenticationCommandService, AuthenticationCommandService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
