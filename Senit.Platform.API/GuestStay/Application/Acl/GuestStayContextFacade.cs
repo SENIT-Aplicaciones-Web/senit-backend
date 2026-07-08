@@ -51,6 +51,7 @@ public class GuestStayContextFacade(
             guestStay.RoomId,
             guestStay.GuestId,
             guestStay.GuestName,
+            guestStay.AdditionalGuestsJson,
             guestStay.StartAt,
             guestStay.ExpectedEndAt,
             actualEndAt,
