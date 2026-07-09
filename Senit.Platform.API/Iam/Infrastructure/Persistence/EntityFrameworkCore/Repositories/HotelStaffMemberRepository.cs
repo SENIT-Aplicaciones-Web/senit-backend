@@ -81,18 +81,4 @@ public class HotelStaffMemberRepository(AppDbContext context)
                               assignment.Status == "active",
                 cancellationToken);
     }
-    /// <summary>
-    ///     Finds the first staff assignment in a hotel by role.
-    /// </summary>
-    public async Task<HotelStaffMember?> FindFirstAssignmentByHotelIdAndRoleAsync(
-        string hotelId,
-        string role,
-        CancellationToken cancellationToken = default)
-    {
-        return await Context.Set<HotelStaffMember>()
-            .FirstOrDefaultAsync(
-                assignment => assignment.HotelId == hotelId && assignment.Role == role,
-                cancellationToken);
-    }
-
 }

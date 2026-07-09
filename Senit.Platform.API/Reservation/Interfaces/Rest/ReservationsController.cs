@@ -50,33 +50,6 @@ public class ReservationsController(
         return Ok(resources);
     }
 
-
-    [HttpGet("{reservationId}")]
-    [SwaggerOperation(
-        Summary = "Get a reservation by id",
-        Description = "Get a reservation by id. When hotelId is provided, the reservation must belong to that hotel.",
-        OperationId = "GetReservationById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The reservation was found", typeof(ReservationResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The reservation was not found")]
-    public async Task<IActionResult> GetReservationById(
-        [FromRoute] string reservationId,
-        [FromQuery] string? hotelId,
-        CancellationToken cancellationToken)
-    {
-        var entity = await queryService.Handle(new GetReservationByIdQuery(reservationId), cancellationToken);
-
-        if (entity != null && !string.IsNullOrWhiteSpace(hotelId) && entity.HotelId != hotelId)
-            entity = null;
-
-        return ReservationActionResultAssembler.ToActionResultFromGetReservationByIdResult(
-            this,
-            entity,
-            _contextLocalizer,
-            _problemDetailsFactory,
-            foundEntity => Ok(ReservationResourceFromEntityAssembler.ToResourceFromEntity(foundEntity))
-        );
-    }
-
     [HttpPost]
     [SwaggerOperation(
         Summary = "Create a reservation",

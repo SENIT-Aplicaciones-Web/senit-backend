@@ -21,7 +21,6 @@ public static class GuestStayResourceFromEntityAssembler
             entity.RoomId,
             entity.GuestId,
             entity.GuestName,
-            entity.AdditionalGuestsJson,
             entity.StartAt,
             entity.ExpectedEndAt,
             entity.ActualEndAt,

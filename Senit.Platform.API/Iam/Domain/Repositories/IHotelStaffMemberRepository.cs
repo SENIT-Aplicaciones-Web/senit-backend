@@ -61,12 +61,4 @@ public interface IHotelStaffMemberRepository : IBaseRepository<HotelStaffMember>
         string userId,
         string excludedHotelId,
         CancellationToken cancellationToken = default);
-    /// <summary>
-    ///     Finds the first staff assignment in a hotel by role.
-    /// </summary>
-    Task<HotelStaffMember?> FindFirstAssignmentByHotelIdAndRoleAsync(
-        string hotelId,
-        string role,
-        CancellationToken cancellationToken = default);
-
 }

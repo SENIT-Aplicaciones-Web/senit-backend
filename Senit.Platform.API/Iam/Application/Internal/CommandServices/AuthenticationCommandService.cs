@@ -9,7 +9,6 @@ using Senit.Platform.API.Iam.Domain.Repositories;
 using Senit.Platform.API.Shared.Application.Model;
 using Senit.Platform.API.Shared.Domain.Repositories;
 using Senit.Platform.API.SubscriptionPayment.Interfaces.Acl;
-using Senit.Platform.API.SubscriptionPayment.Domain.Model.ValueObjects;
 
 namespace Senit.Platform.API.Iam.Application.Internal.CommandServices;
 
@@ -101,7 +100,7 @@ public class AuthenticationCommandService(
             hotelId,
             "Basic",
             "active",
-            SubscriptionPlanCatalog.GetMonthlyAmount("Basic"),
+            49.00m,
             DateTime.UtcNow,
             null,
             cancellationToken);

@@ -132,13 +132,4 @@
   <data name="StartDateInPast" xml:space="preserve">
     <value>The reservation start date cannot be earlier than the current time.</value>
   </data>
-  <data name="CannotCancelStartedReservation" xml:space="preserve">
-    <value>The reservation cannot be cancelled after its start time.</value>
-  </data>
-  <data name="Additional guests data must not exceed 4000 characters" xml:space="preserve">
-    <value>Additional guests data must not exceed 4000 characters</value>
-  </data>
-  <data name="Guests quantity must be between 1 and 99" xml:space="preserve">
-    <value>Guests quantity must be between 1 and 99</value>
-  </data>
 </root>

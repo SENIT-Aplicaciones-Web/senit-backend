@@ -8,7 +8,6 @@ public record CreateGuestStayCommand(
     string RoomId,
     string GuestId,
     string GuestName,
-    string? AdditionalGuestsJson,
     DateTime StartAt,
     DateTime ExpectedEndAt,
     DateTime? ActualEndAt,

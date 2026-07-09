@@ -22,13 +22,4 @@ public interface IFrontDeskContextFacade
     ///     Checks whether a hotel exists without exposing FrontDesk domain objects.
     /// </summary>
     Task<bool> HotelExists(string hotelId, CancellationToken cancellationToken = default);
-    /// <summary>
-    ///     Updates a hotel plan and status without exposing FrontDesk domain objects.
-    /// </summary>
-    Task<bool> UpdateHotelPlanAndStatus(
-        string hotelId,
-        string plan,
-        string status,
-        CancellationToken cancellationToken = default);
-
 }

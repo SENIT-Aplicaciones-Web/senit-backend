@@ -9,7 +9,6 @@ public record UpdateGuestStayCommand(
     string RoomId,
     string GuestId,
     string GuestName,
-    string? AdditionalGuestsJson,
     DateTime StartAt,
     DateTime ExpectedEndAt,
     DateTime? ActualEndAt,

@@ -33,7 +33,6 @@ public static class ModelBuilderExtensions
         builder.Entity<GuestStayRecord>().Property(entity => entity.RoomId).IsRequired().HasMaxLength(64);
         builder.Entity<GuestStayRecord>().Property(entity => entity.GuestId).IsRequired().HasMaxLength(64);
         builder.Entity<GuestStayRecord>().Property(entity => entity.GuestName).IsRequired().HasMaxLength(250);
-        builder.Entity<GuestStayRecord>().Property(entity => entity.AdditionalGuestsJson).HasColumnType("longtext");
         builder.Entity<GuestStayRecord>().Property(entity => entity.Status).IsRequired().HasMaxLength(50);
         builder.Entity<GuestStayRecord>().Property(entity => entity.BaseAmount).HasPrecision(10, 2);
         builder.Entity<GuestStayRecord>().Property(entity => entity.AdditionalAmount).HasPrecision(10, 2);

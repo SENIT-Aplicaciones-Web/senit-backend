@@ -24,7 +24,6 @@ public static class UpdateReservationCommandFromResourceAssembler
             resource.Phone,
             resource.Email,
             resource.GuestsQuantity,
-            resource.AdditionalGuestsJson,
             resource.StartAt,
             resource.EndAt,
             resource.Status,

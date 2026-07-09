@@ -99,7 +99,4 @@
   <data name="Username must use 3 to 100 letters numbers or underscores" xml:space="preserve">
     <value>El nombre de usuario debe usar entre 3 y 100 letras números o guiones bajos</value>
   </data>
-  <data name="UserAlreadyActiveInHotel" xml:space="preserve">
-    <value>El usuario ya pertenece a un hotel activo.</value>
-  </data>
 </root>

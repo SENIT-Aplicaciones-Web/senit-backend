@@ -38,13 +38,9 @@ public class CreateReservationResource
     [OpenApiExample("juan.perez@mail.com")]
     public string? Email { get; init; }
 
-    [Range(1, 99, ErrorMessage = "Guests quantity must be between 1 and 99")]
+    [Range(1, 50, ErrorMessage = "Guests quantity must be between 1 and 50")]
     [OpenApiExample(2)]
     public int GuestsQuantity { get; init; }
-
-    [StringLength(4000, ErrorMessage = "Additional guests data must not exceed 4000 characters")]
-    [OpenApiExample("[{\"fullName\":\"Ana Torres\",\"dni\":\"87654321\"}]")]
-    public string? AdditionalGuestsJson { get; init; }
 
     [OpenApiExample("2026-07-06T14:00:00Z")]
     public DateTime StartAt { get; init; }

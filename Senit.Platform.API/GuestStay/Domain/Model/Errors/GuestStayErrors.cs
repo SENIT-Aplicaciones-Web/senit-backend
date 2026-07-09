@@ -7,7 +7,6 @@ public enum GuestStayErrors
 {
     ConsumptionNotFound,
     GuestNotFound,
-    GuestHasActiveStay,
     StayNotFound,
     InvalidAmount,
     InvalidDateRange,

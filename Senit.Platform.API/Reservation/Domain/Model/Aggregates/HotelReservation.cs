@@ -14,7 +14,6 @@ public class HotelReservation : AuditableEntity
     public string Phone { get; private set; } = string.Empty;
     public string? Email { get; private set; }
     public int GuestsQuantity { get; private set; }
-    public string? AdditionalGuestsJson { get; private set; }
     public DateTime StartAt { get; private set; }
     public DateTime EndAt { get; private set; }
     public string Status { get; private set; } = string.Empty;
@@ -38,7 +37,6 @@ public class HotelReservation : AuditableEntity
         string phone,
         string? email,
         int guestsQuantity,
-        string? additionalGuestsJson,
         DateTime startAt,
         DateTime endAt,
         string status,
@@ -57,7 +55,6 @@ public class HotelReservation : AuditableEntity
         Phone = phone;
         Email = email;
         GuestsQuantity = guestsQuantity;
-        AdditionalGuestsJson = additionalGuestsJson;
         StartAt = startAt;
         EndAt = endAt;
         Status = status;
@@ -77,7 +74,6 @@ public class HotelReservation : AuditableEntity
         string phone,
         string? email,
         int guestsQuantity,
-        string? additionalGuestsJson,
         DateTime startAt,
         DateTime endAt,
         string status,
@@ -95,7 +91,6 @@ public class HotelReservation : AuditableEntity
         Phone = phone;
         Email = email;
         GuestsQuantity = guestsQuantity;
-        AdditionalGuestsJson = additionalGuestsJson;
         StartAt = startAt;
         EndAt = endAt;
         Status = status;

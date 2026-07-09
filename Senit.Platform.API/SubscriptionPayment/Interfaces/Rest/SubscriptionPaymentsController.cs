@@ -1,16 +1,13 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Senit.Platform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using Swashbuckle.AspNetCore.Annotations;
 using Senit.Platform.API.SubscriptionPayment.Application.CommandServices;
-using Senit.Platform.API.SubscriptionPayment.Domain.Model.Commands;
 using Senit.Platform.API.SubscriptionPayment.Application.QueryServices;
 using Senit.Platform.API.SubscriptionPayment.Domain.Model.Queries;
 using Senit.Platform.API.SubscriptionPayment.Interfaces.Rest.Resources;
 using Senit.Platform.API.SubscriptionPayment.Interfaces.Rest.Transform;
 using Senit.Platform.API.SubscriptionPayment.Resources;
-using Senit.Platform.API.Shared.Interfaces.Rest.Transform;
 using ProblemDetailsFactory = Senit.Platform.API.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
 
 namespace Senit.Platform.API.SubscriptionPayment.Interfaces.Rest;
@@ -25,7 +22,6 @@ namespace Senit.Platform.API.SubscriptionPayment.Interfaces.Rest;
 public class SubscriptionPaymentsController(
     ISubscriptionPaymentQueryService queryService,
     ISubscriptionPaymentCommandService commandService,
-    IStripeSubscriptionCheckoutCommandService checkoutCommandService,
     IStringLocalizer<SubscriptionPaymentMessages> contextLocalizer,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
@@ -35,55 +31,6 @@ public class SubscriptionPaymentsController(
 
     // Subscription payments are shown as a history list in the frontend.
     // The current user interface does not open an individual subscription payment detail page.
-
-
-    [HttpPost("stripe-checkout/sessions")]
-    [SwaggerOperation(
-        Summary = "Create a Stripe Checkout session",
-        Description = "Create a Stripe hosted Checkout session for a new hotel subscription registration",
-        OperationId = "CreateStripeSubscriptionCheckoutSession")]
-    [SwaggerResponse(StatusCodes.Status201Created, "The Stripe Checkout session was created", typeof(StripeCheckoutSessionResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "The checkout registration data is invalid")]
-    [SwaggerResponse(StatusCodes.Status409Conflict, "The email already has an active hotel assignment")]
-    [AllowAnonymous]
-    public async Task<IActionResult> CreateStripeCheckoutSession(
-        [FromBody] CreateStripeCheckoutSessionResource resource,
-        CancellationToken cancellationToken)
-    {
-        var command = CreateStripeCheckoutSessionCommandFromResourceAssembler.ToCommandFromResource(resource);
-        var result = await checkoutCommandService.Handle(command, cancellationToken);
-
-        return ActionResultAssembler.ToActionResultFromCommandResult(
-            this,
-            result,
-            _contextLocalizer,
-            _problemDetailsFactory,
-            session => StatusCode(
-                StatusCodes.Status201Created,
-                StripeCheckoutSessionResourceFromResultAssembler.ToResourceFromResult(session)));
-    }
-
-    [HttpGet("stripe-checkout/sessions/{sessionId}")]
-    [SwaggerOperation(
-        Summary = "Get a Stripe Checkout session",
-        Description = "Get the current status of a Stripe Checkout session and activate the hotel registration when Stripe confirms payment",
-        OperationId = "GetStripeSubscriptionCheckoutSession")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The Stripe Checkout session was found", typeof(StripeCheckoutSessionResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The Stripe Checkout session was not found")]
-    [AllowAnonymous]
-    public async Task<IActionResult> GetStripeCheckoutSession(
-        [FromRoute] string sessionId,
-        CancellationToken cancellationToken)
-    {
-        var result = await checkoutCommandService.GetSession(sessionId, cancellationToken);
-
-        return ActionResultAssembler.ToActionResultFromCommandResult(
-            this,
-            result,
-            _contextLocalizer,
-            _problemDetailsFactory,
-            session => Ok(StripeCheckoutSessionResourceFromResultAssembler.ToResourceFromResult(session)));
-    }
 
     [HttpGet]
     [SwaggerOperation(

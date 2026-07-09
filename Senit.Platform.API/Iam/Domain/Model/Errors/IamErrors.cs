@@ -8,7 +8,6 @@ public enum IamErrors
     InvalidCredentials,
     InvalidRequest,
     DuplicateEmail,
-    UserAlreadyActiveInHotel,
     UserNotFound,
     UserNotAssignedToHotel,
     HotelNotFound,
